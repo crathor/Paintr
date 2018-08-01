@@ -8,7 +8,7 @@ class Player extends Component {
       <Circle
         x={player.x}
         y={player.y}
-        radius={window.innerHeight * player.size}
+        radius={player.size}
         fill={player.color}
         stroke={player.color}
       />

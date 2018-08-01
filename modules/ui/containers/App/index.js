@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import { withTracker } from 'meteor/react-meteor-data'
-import { Layer, Rect, Stage, Group, Circle } from 'react-konva'
+import { Layer, Stage } from 'react-konva'
 import Player from '../../components/Player'
 import { Players } from '../../../api/players'
-import Controller from '../../components/controller'
+import Controller from '../../components/Controller'
 import './styles.css'
 class App extends Component {
   constructor(props) {
@@ -49,7 +49,7 @@ class App extends Component {
     return (
       <div style={{ display: 'flex' }}>
         <Stage
-          width={window.innerWidth / 2}
+          width={window.innerWidth}
           height={window.innerHeight}
           style={{ background: '#ccc' }}
         >
@@ -61,9 +61,7 @@ class App extends Component {
               : null}
           </Layer>
         </Stage>
-        <div className="controllerZone">
-          <Controller />
-        </div>
+        <Controller />
       </div>
     )
   }

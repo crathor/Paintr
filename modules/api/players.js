@@ -8,33 +8,31 @@ export const Players = new Mongo.Collection('players')
 //     return Players.find()
 //   })
 // }
-
+const getPlayer = player => {
+  return Players.findOne({ player })
+}
 Meteor.methods({
   // 'remove.avenger' (player) {
   //   Players.remove({ player })
   // },
   'move.up'(player) {
-    Players.update(
-      { player },
-      { $set: { y: Players.findOne({ player }).y - 10 } }
-    )
+    const p = getPlayer(player)
+    if (p.y <= 0 + p.size || !p) return
+    Players.update({ player }, { $set: { y: p.y - p.speed } })
   },
   'move.down'(player) {
-    Players.update(
-      { player },
-      { $set: { y: Players.findOne({ player }).y + 10 } }
-    )
+    const p = getPlayer(player)
+    if (p.y >= 803 - p.size || !p) return
+    Players.update({ player }, { $set: { y: p.y + p.speed } })
   },
   'move.left'(player) {
-    Players.update(
-      { player },
-      { $set: { x: Players.findOne({ player }).x - 10 } }
-    )
+    const p = getPlayer(player)
+    if (p.x === 0 + p.size || !p) return
+    Players.update({ player }, { $set: { x: p.x - p.speed } })
   },
   'move.right'(player) {
-    Players.update(
-      { player },
-      { $set: { x: Players.findOne({ player }).x + 10 } }
-    )
+    const p = getPlayer(player)
+    if (p.x >= 969 - p.size || !p) return
+    Players.update({ player }, { $set: { x: p.x + p.speed } })
   }
 })
