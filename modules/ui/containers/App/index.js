@@ -1,0 +1,44 @@
+import React, { Component } from 'react'
+import { Layer, Rect, Stage, Group } from 'react-konva'
+
+class MyRect extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      color: 'green'
+    }
+    this.handleClick = this.handleClick.bind(this)
+  }
+  handleClick() {
+    this.setState({
+      color: Konva.Util.getRandomColor()
+    })
+  }
+  render() {
+    return (
+      <Rect
+        x={10}
+        y={10}
+        width={50}
+        height={50}
+        fill={this.state.color}
+        shadowBlur={10}
+        onClick={this.handleClick}
+      />
+    )
+  }
+}
+
+class App extends Component {
+  render() {
+    return (
+      <Stage width={window.innerWidth} height={window.innerHeight}>
+        <Layer>
+          <MyRect />
+        </Layer>
+      </Stage>
+    )
+  }
+}
+
+export default App
