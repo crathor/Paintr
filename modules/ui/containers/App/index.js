@@ -1,29 +1,44 @@
 import React, { Component } from 'react'
-import { Layer, Rect, Stage, Group } from 'react-konva'
+import { Layer, Rect, Stage, Group, Circle } from 'react-konva'
 
-class MyRect extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      color: 'green'
-    }
-    this.handleClick = this.handleClick.bind(this)
+class Player extends Component {
+  state = {
+    x: 100,
+    y: 100
   }
-  handleClick() {
-    this.setState({
-      color: Konva.Util.getRandomColor()
+
+  componentDidMount() {
+    window.addEventListener('keydown', event => {
+      if (event.keyCode) {
+        console.log(event.keyCode)
+        switch (event.keyCode) {
+          case 37:
+            this.setState(prevState => ({ x: prevState.x - 10 }))
+            break
+          case 38:
+            this.setState(prevState => ({ y: prevState.y - 10 }))
+            break
+          case 39:
+            this.setState(prevState => ({ x: prevState.x + 10 }))
+            break
+          case 40:
+            this.setState(prevState => ({ y: prevState.y + 10 }))
+            break
+
+          default:
+            break
+        }
+      }
     })
   }
   render() {
     return (
-      <Rect
-        x={10}
-        y={10}
-        width={50}
-        height={50}
-        fill={this.state.color}
-        shadowBlur={10}
-        onClick={this.handleClick}
+      <Circle
+        x={this.state.x}
+        y={this.state.y}
+        radius={window.innerHeight * 0.01}
+        fill="red"
+        stroke="black"
       />
     )
   }
@@ -32,9 +47,13 @@ class MyRect extends React.Component {
 class App extends Component {
   render() {
     return (
-      <Stage width={window.innerWidth} height={window.innerHeight}>
+      <Stage
+        width={window.innerWidth}
+        height={window.innerHeight}
+        style={{ background: '#ccc' }}
+      >
         <Layer>
-          <MyRect />
+          <Player />
         </Layer>
       </Stage>
     )
