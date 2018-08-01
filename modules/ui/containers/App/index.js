@@ -44,7 +44,6 @@ class App extends Component {
   }
   render() {
     const { players } = this.props
-    console.log(this.props.players)
     return (
       <Stage
         width={window.innerWidth}
