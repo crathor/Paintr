@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import nipplejs from "nipplejs";
+import { Meteor } from "meteor/meteor";
 
 class Controller extends Component {
   constructor(props) {
@@ -9,40 +10,42 @@ class Controller extends Component {
     this.manager.options = {
       zone: this.joystickZone
     };
+    this.direction = {};
   }
-  componentDidMount() {}
-  render() {
+  move() {
+    // console.log(this.direction)
+    if ("dir:up" in this.direction) Meteor.call("move.up", Meteor.userId());
+    if ("dir:down" in this.direction) Meteor.call("move.down", Meteor.userId());
+    if ("dir:right" in this.direction)
+      Meteor.call("move.right", Meteor.userId());
+    if ("dir:left" in this.direction) Meteor.call("move.left", Meteor.userId());
+  }
+  componentDidMount() {
     this.manager
-      .on("added", function(evt, nipple) {
-        nipple.on("dir:up", function(evt) {
-          console.log("dir UP", evt);
+      .on("added", (evt, nipple) => {
+        nipple.on("dir:up", evt => {
+          this.direction["dir:up"] = true;
         });
-        nipple.on("dir:down", function(evt) {
-          console.log("dir DOWN", evt);
+        nipple.on("dir:down", evt => {
+          this.direction["dir:down"] = true;
         });
-        nipple.on("dir:left", function(evt) {
-          console.log("dir LEFT", evt);
+        nipple.on("dir:left", evt => {
+          this.direction["dir:left"] = true;
         });
-        nipple.on("dir:right", function(evt) {
-          console.log("dir RIGHT", evt);
+        nipple.on("dir:right", evt => {
+          this.direction["dir:right"] = true;
         });
-        // nipple.on("plain:left", function(evt) {
-        //   console.log("plain LEFT", evt);
-        // });
-        // nipple.on("plain:right", function(evt) {
-        //   console.log("plain RIGHT", evt);
-        // });
-        // nipple.on("plain:up", function(evt) {
-        //   console.log("plain UP", evt);
-        // });
-        // nipple.on("plain:down", function(evt) {
-        //   console.log("plain DOWN", evt);
-        // });
       })
-      .on("removed", function(evt, nipple) {
+      .on("removed", (evt, nipple) => {
         nipple.off("start move end dir plain");
+        this.direction = {};
       });
 
+    setInterval(() => {
+      window.requestAnimationFrame(this.move.bind(this));
+    }, 30);
+  }
+  render() {
     return (
       <div ref={this.joystickZone}>
         <div id="joystick-zone" />
