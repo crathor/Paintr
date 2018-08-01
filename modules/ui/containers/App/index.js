@@ -3,7 +3,8 @@ import { withTracker } from 'meteor/react-meteor-data'
 import { Layer, Rect, Stage, Group, Circle } from 'react-konva'
 import Player from '../../components/Player'
 import { Players } from '../../../api/players'
-
+import Controller from '../../components/controller'
+import './styles.css'
 class App extends Component {
   constructor(props) {
     super(props)
@@ -44,18 +45,26 @@ class App extends Component {
   }
   render() {
     const { players } = this.props
+    console.log(this.props.players)
     return (
-      <Stage
-        width={window.innerWidth}
-        height={window.innerHeight}
-        style={{ background: '#ccc' }}
-      >
-        <Layer clearBeforeDraw={false}>
-          {players.length
-            ? players.map(player => <Player key={player._id} player={player} />)
-            : null}
-        </Layer>
-      </Stage>
+      <div style={{ display: 'flex' }}>
+        <Stage
+          width={window.innerWidth / 2}
+          height={window.innerHeight}
+          style={{ background: '#ccc' }}
+        >
+          <Layer clearBeforeDraw={false}>
+            {players.length
+              ? players.map(player => (
+                  <Player key={player._id} player={player} />
+                ))
+              : null}
+          </Layer>
+        </Stage>
+        <div className="controllerZone">
+          <Controller />
+        </div>
+      </div>
     )
   }
 }
