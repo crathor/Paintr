@@ -1,39 +1,53 @@
-import { Mongo } from "meteor/mongo";
-import { Meteor } from "meteor/meteor";
+import { Mongo } from 'meteor/mongo'
+import { Meteor } from 'meteor/meteor'
 
-export const Players = new Mongo.Collection("players");
+export const Players = new Mongo.Collection('players')
 
-// if (Meteor.isServer) {
-//   Meteor.publish('players', function todosPublication() {
-//     return Players.find()
-//   })
-// }
+if (Meteor.isServer) {
+  // Meteor.publish('players', function todosPublication() {
+  //   return Players.find()
+  // })
+  AccountsGuest.enabled = true
+  AccountsGuest.anonymous = true
+}
 
 const getPlayer = player => {
-  return Players.findOne({ player });
-};
+  return Players.findOne({ player })
+}
+
 Meteor.methods({
-  // 'remove.avenger' (player) {
-  //   Players.remove({ player })
-  // },
-  "move.up"(player) {
-    const p = getPlayer(player);
-    if (p.y <= 0 + p.size || !p) return;
-    Players.update({ player }, { $set: { y: p.y - p.speed } });
+  'remove.player'(player) {
+    Players.remove({ player })
   },
-  "move.down"(player, height) {
-    const p = getPlayer(player);
-    if (p.y >= height - p.size || !p) return;
-    Players.update({ player }, { $set: { y: p.y + p.speed } });
+  'add.player'(name) {
+    Players.insert({
+      name,
+      color: '#' + Math.floor(Math.random() * 16777215).toString(16),
+      size: 10,
+      speed: 10,
+      y: 0,
+      x: 0,
+      player: Meteor.userId()
+    })
   },
-  "move.left"(player) {
-    const p = getPlayer(player);
-    if (p.x <= 0 + p.size || !p) return;
-    Players.update({ player }, { $set: { x: p.x - p.speed } });
+  'move.up'(player) {
+    const p = getPlayer(player)
+    if (p.y <= 0 + p.size || !p) return
+    Players.update({ player }, { $set: { y: p.y - p.speed } })
   },
-  "move.right"(player, width) {
-    const p = getPlayer(player);
-    if (p.x >= width - p.size || !p) return;
-    Players.update({ player }, { $set: { x: p.x + p.speed } });
+  'move.down'(player, height) {
+    const p = getPlayer(player)
+    if (p.y >= height - p.size || !p) return
+    Players.update({ player }, { $set: { y: p.y + p.speed } })
+  },
+  'move.left'(player) {
+    const p = getPlayer(player)
+    if (p.x <= 0 + p.size || !p) return
+    Players.update({ player }, { $set: { x: p.x - p.speed } })
+  },
+  'move.right'(player, width) {
+    const p = getPlayer(player)
+    if (p.x >= width - p.size || !p) return
+    Players.update({ player }, { $set: { x: p.x + p.speed } })
   }
-});
+})
