@@ -14,6 +14,9 @@ class Controller extends Component {
     this.direction = {}
     this.windowHeight = window.innerHeight
     this.windowWidth = window.innerWidth
+    this.state = {
+      player: { color: 'orange' }
+    }
   }
   move() {
     if ('dir:up' in this.direction) Meteor.call('move.up', Meteor.userId())
@@ -23,7 +26,11 @@ class Controller extends Component {
       Meteor.call('move.right', Meteor.userId(), this.windowWidth)
     if ('dir:left' in this.direction) Meteor.call('move.left', Meteor.userId())
   }
-  componentDidMount() {
+  async componentDidMount() {
+    Meteor.call('add.player', 'asdwddwfew' + Math.random() * 1000)
+    Meteor.call('get.player', Meteor.userId(), (err, res) => {
+      this.setState({ player: res })
+    })
     this.manager
       .on('added', (evt, nipple) => {
         nipple.on('dir:up', evt => {
@@ -53,10 +60,15 @@ class Controller extends Component {
     }, 30)
   }
   render() {
+    console.log(this.state)
     return (
       <div
         ref={this.joystickZone}
-        style={{ background: 'orange', width: '100vw', height: '100vh' }}
+        style={{
+          background: this.state.player.color,
+          width: '100vw',
+          height: '100vh'
+        }}
       >
         <div id="joystick-zone" />
       </div>

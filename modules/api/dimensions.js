@@ -14,14 +14,11 @@ const getPlayer = player => {
 }
 
 Meteor.methods({
-  'reset.players'() {
-    Players.remove({})
-  },
-  'get.player'(id) {
-    return getPlayer(id)
-  },
   'remove.player'(player) {
     Players.remove({ player })
+  },
+  'set.GameDimensions'(height, width) {
+    Dimensions.insert({ height, width })
   },
   'add.player'(name) {
     Players.insert({
@@ -36,6 +33,7 @@ Meteor.methods({
   },
   'move.up'(player) {
     const p = getPlayer(player)
+    console.log(Dimensions.find())
     if (p.y <= 0 + p.size || !p) return
     Players.update({ player }, { $set: { y: p.y - p.speed } })
   },
