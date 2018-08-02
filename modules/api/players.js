@@ -4,9 +4,6 @@ import { Meteor } from 'meteor/meteor'
 export const Players = new Mongo.Collection('players')
 
 if (Meteor.isServer) {
-  // Meteor.publish('players', function todosPublication() {
-  //   return Players.find()
-  // })
   AccountsGuest.enabled = true
   AccountsGuest.anonymous = true
 }
@@ -23,7 +20,7 @@ Meteor.methods({
     Players.insert({
       name,
       color: '#' + Math.floor(Math.random() * 16777215).toString(16),
-      size: 10,
+      size: 20,
       speed: 10,
       y: 0,
       x: 0,
