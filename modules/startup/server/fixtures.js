@@ -1,4 +1,6 @@
 import { Meteor } from 'meteor/meteor'
 import { Players } from '../../api/players'
 
-Meteor.startup(() => {})
+Meteor.startup(() => {
+  Players.remove({})
+})

@@ -1,6 +1,6 @@
 import { Mongo } from 'meteor/mongo'
 import { Meteor } from 'meteor/meteor'
-import Konva from 'konva'
+
 export const Players = new Mongo.Collection('players')
 
 if (Meteor.isServer) {
@@ -14,19 +14,16 @@ const getPlayer = player => {
 }
 
 Meteor.methods({
-  'reset.players'() {
-    Players.remove({})
-  },
-  'get.player'(id) {
-    return getPlayer(id)
-  },
   'remove.player'(player) {
     Players.remove({ player })
+  },
+  'set.GameDimensions'(height, width) {
+    Dimensions.insert({ height, width })
   },
   'add.player'(name) {
     Players.insert({
       name,
-      color: Konva.Util.getRandomColor(),
+      color: '#' + Math.floor(Math.random() * 16777215).toString(16),
       size: 20,
       speed: 10,
       y: 0,
@@ -36,7 +33,7 @@ Meteor.methods({
   },
   'move.up'(player) {
     const p = getPlayer(player)
-    console.log(dimensions)
+    console.log(Dimensions.find())
     if (p.y <= 0 + p.size || !p) return
     Players.update({ player }, { $set: { y: p.y - p.speed } })
   },

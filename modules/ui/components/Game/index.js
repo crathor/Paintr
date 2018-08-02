@@ -27,8 +27,7 @@ class Game extends Component {
         <Stage
           width={window.innerWidth}
           height={window.innerHeight}
-          style={{ background: "#ccc" }}
-          ref={this.stageRef}
+          style={{ background: "#fff" }}
         >
           <Layer clearBeforeDraw={false}>
             {players.length
