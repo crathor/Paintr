@@ -1,15 +1,16 @@
 import React, { Component } from "react";
 import * as Vibrant from "node-vibrant";
 
-componentDidMount = () => {
-  console.log("did run");
-
-  Vibrant.from("./img/Screen Shot 2018-08-02 at 9.19.35 AM.png").getPalette(
-    (err, palette) => console.log(palette)
-  );
-};
-
 class Winner extends Component {
+  componentDidMount() {
+    // Vibrant.from("/onepic.png").getPalette((err, palette) =>
+    //   console.log(palette)
+    // );
+    // Vibrant.from("./threepic.png")
+    //   .quality(1)
+    //   .clearFilters()
+    //   .getSwatches((err, s) => console.log(s));
+  }
   render() {
     return <div />;
   }
