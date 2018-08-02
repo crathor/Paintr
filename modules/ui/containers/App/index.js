@@ -1,57 +1,58 @@
-import React, { Component } from 'react'
-import { withTracker } from 'meteor/react-meteor-data'
-import { Layer, Stage } from 'react-konva'
-import Player from '../../components/Player'
-import { Players } from '../../../api/players'
-import Controller from '../../components/Controller'
-import './styles.css'
+import React, { Component } from "react";
+import { withTracker } from "meteor/react-meteor-data";
+import { Layer, Stage } from "react-konva";
+import Player from "../../components/Player";
+import { Players } from "../../../api/players";
+import Controller from "../../components/Controller";
+import "./styles.css";
 class App extends Component {
   constructor(props) {
-    super(props)
+    super(props);
 
-    this.direction = {}
+    this.direction = {};
   }
   move() {
-    if ('ArrowUp' in this.direction) Meteor.call('move.up', Meteor.userId())
-    if ('ArrowDown' in this.direction) Meteor.call('move.down', Meteor.userId())
-    if ('ArrowRight' in this.direction)
-      Meteor.call('move.right', Meteor.userId())
-    if ('ArrowLeft' in this.direction) Meteor.call('move.left', Meteor.userId())
+    if ("ArrowUp" in this.direction) Meteor.call("move.up", Meteor.userId());
+    if ("ArrowDown" in this.direction)
+      Meteor.call("move.down", Meteor.userId());
+    if ("ArrowRight" in this.direction)
+      Meteor.call("move.right", Meteor.userId());
+    if ("ArrowLeft" in this.direction)
+      Meteor.call("move.left", Meteor.userId());
   }
 
   componentDidMount() {
     window.onkeydown = e => {
-      this.direction[e.key] = true
+      this.direction[e.key] = true;
       switch (e.key) {
-        case '`':
-          Meteor.call('show.message', {
+        case "`":
+          Meteor.call("show.message", {
             player: Meteor.userId(),
             showMessage: !Avengers.findOne({ direction: Meteor.userId() })
               .showMessage
-          })
-          break
-        case '-':
-          Meteor.call('remove.avenger', Meteor.userId())
-          break
+          });
+          break;
+        case "-":
+          Meteor.call("remove.avenger", Meteor.userId());
+          break;
       }
-    }
+    };
     window.onkeyup = e => {
-      delete this.direction[e.key]
-    }
+      delete this.direction[e.key];
+    };
 
     setInterval(() => {
-      window.requestAnimationFrame(this.move.bind(this))
-    }, 30)
+      window.requestAnimationFrame(this.move.bind(this));
+    }, 30);
   }
   render() {
-    const { players } = this.props
-    console.log(this.props.players)
+    const { players } = this.props;
     return (
-      <div style={{ display: 'flex' }}>
+      <div style={{ display: "flex" }}>
         <Stage
           width={window.innerWidth}
           height={window.innerHeight}
-          style={{ background: '#ccc' }}
+          style={{ background: "#ccc" }}
         >
           <Layer clearBeforeDraw={false}>
             {players.length
@@ -63,12 +64,12 @@ class App extends Component {
         </Stage>
         <Controller />
       </div>
-    )
+    );
   }
 }
 
 export default withTracker(() => {
   return {
     players: Players.find({}).fetch()
-  }
-})(App)
+  };
+})(App);
