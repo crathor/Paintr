@@ -12,11 +12,6 @@ class Game extends Component {
 
   componentDidMount() {
     Meteor.call('reset.players')
-    // this.getDimensions()
-    // window.resize = event => this.getDimensions()
-  }
-  getDimensions = () => {
-    Meteor.call('set.GameDimensions', window.innerHeight, window.innerWidth)
   }
   render() {
     const { players } = this.props
