@@ -37,13 +37,18 @@ class Game extends Component {
   }
   componentDidMount() {
     Meteor.call('reset.players')
-
+    this.mouseX = 0
+    this.mouseY = 0
     this.canvas = document.getElementById('game')
     this.ctx = this.canvas.getContext('2d')
 
     this.framesPerSecond = 30
     setInterval(this.updateAll.bind(this), 1000 / this.framesPerSecond)
 
+    this.canvas.addEventListener(
+      'mousemove',
+      this.updateMousePosition.bind(this)
+    )
     this.resetGame()
 
     window.onkeydown = e => {
@@ -61,9 +66,16 @@ class Game extends Component {
       delete this.direction[e.key]
     }
   }
+  updateMousePosition(e) {
+    const rect = this.canvas.getBoundingClientRect()
+    const root = document.documentElement
+
+    this.mouseX = e.clientX - rect.left - root.scrollLeft
+    this.mouseY = e.clientY - rect.top - root.scrollTop
+  }
   resetGame() {
     BRICK_GRID.map((brick, index) => {
-      return (BRICK_GRID[index] = 'blue')
+      return BRICK_GRID[index]
     })
   }
   updateAll() {
@@ -74,6 +86,12 @@ class Game extends Component {
     this.colorRect(0, 0, this.canvas.width, this.canvas.height, 'black') //clear screen
     this.drawGrid() // draw grid
     this.drawPlayers() // draw players
+    // this.colorText(
+    //   `${mouseBrickCol},${mouseBrickRow}:${brickIndex}`,
+    //   this.mouseX,
+    //   this.mouseY,
+    //   'yellow'
+    // )
   }
   colorRect(topLeftX, topLeftY, boxWidth, boxHeight, fillColor) {
     this.ctx.fillStyle = fillColor
@@ -85,24 +103,43 @@ class Game extends Component {
     this.ctx.arc(centerX, centerY, radius, 0, Math.PI * 2, true)
     this.ctx.fill()
   }
+  colorText(showWords, textX, textY, fillColor) {
+    this.ctx.fillStyle = fillColor
+    this.ctx.fillText(showWords, textX, textY)
+  }
   drawPlayers() {
     if (this.props.players.length > 0) {
+      this.player = this.props.players[0]
+      console.log(
+        this.props.players.filter(player => player.player === Meteor.userId())
+      )
       this.props.players.forEach(player => {
         this.colorCircle(player.x, player.y, player.size, player.color)
       })
+      const playerBrickCol = Math.floor(this.player.x / BRICK_WIDTH)
+      const playerBrickRow = Math.floor(this.player.y / BRICK_HEIGHT)
+      const brickIndex = this.rowColToArrayIndex(playerBrickCol, playerBrickRow)
+
+      if (brickIndex >= 0 && brickIndex < BRICK_COLUMNS * BRICK_ROWS) {
+        BRICK_GRID[brickIndex] = this.player.color
+      }
     } else {
       console.log('no')
     }
   }
+  rowColToArrayIndex(col, row) {
+    return col + BRICK_COLUMNS * row
+  }
   drawGrid = () => {
     for (let eachRow = 0; eachRow < BRICK_ROWS; eachRow++) {
       for (let eachCol = 0; eachCol < BRICK_COLUMNS; eachCol++) {
+        const arrayIndex = this.rowColToArrayIndex(eachCol, eachRow)
         this.colorRect(
           BRICK_WIDTH * eachCol,
           BRICK_HEIGHT * eachRow,
           BRICK_WIDTH - BRICK_GAP,
           BRICK_HEIGHT - BRICK_GAP,
-          BRICK_GRID[eachCol]
+          BRICK_GRID[arrayIndex]
         )
       }
     }
@@ -129,6 +166,7 @@ class Game extends Component {
 export default withTracker(() => {
   //Meteor.subscribe('players')
   return {
-    players: Players.find({}).fetch()
+    players: Players.find({}).fetch(),
+    player: Players.findOne({ player: Meteor.userId() })
   }
 })(Game)

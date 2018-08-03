@@ -1,19 +1,23 @@
 import React, { Component } from 'react'
-import { Circle } from 'react-konva'
+import { Meteor } from 'meteor/meteor'
+import { withTracker } from 'meteor/react-meteor-data'
 
-class Player extends Component {
-  render() {
-    const { player } = this.props
-    return (
-      <Circle
-        x={player.x}
-        y={player.y}
-        radius={player.size}
-        fill={player.color}
-        stroke={player.color}
-      />
-    )
-  }
+const Player = ({ generatePlayer, player }) => {
+  console.log('hello')
+  return generatePlayer(player.x, player.y, player.size, player.color)
 }
 
 export default Player
+// export default withTracker(() => {
+//   return {
+//     player: Players.findOne({ player: Meteor.userId() })
+//   }
+// })(Player)
+
+// const playerBrickCol = Math.floor(this.player.x / BRICK_WIDTH)
+// const playerBrickRow = Math.floor(this.player.y / BRICK_HEIGHT)
+// const brickIndex = this.rowColToArrayIndex(playerBrickCol, playerBrickRow)
+
+// if (brickIndex >= 0 && brickIndex < BRICK_COLUMNS * BRICK_ROWS) {
+//   BRICK_GRID[brickIndex] = this.player.color
+// }
