@@ -17,7 +17,11 @@ const rowColToArrayIndex = (col, row) => {
 export const GameBoard = new Mongo.Collection('gameboard')
 
 Meteor.methods({
-  'get.gameboard'() {
-    return GameBoard.findOne({})
+  'reset.gameboard'() {
+    GameBoard.update(
+      {},
+      { $set: { color: '#f4f4f4' } },
+      { upsert: true, multi: true }
+    )
   }
 })

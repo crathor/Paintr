@@ -46,13 +46,15 @@ class Game extends Component {
       'mousemove',
       this.updateMousePosition.bind(this)
     )
-    this.resetGame()
 
     window.onkeydown = e => {
       this.direction[e.key] = true
       switch (e.key) {
         case 'Enter':
           Meteor.call('add.player', 'asdwddwfew' + Math.random() * 1000)
+          break
+        case '`':
+          Meteor.call('reset.gameboard')
           break
         default:
           break
@@ -68,11 +70,6 @@ class Game extends Component {
 
     this.mouseX = e.clientX - rect.left - root.scrollLeft
     this.mouseY = e.clientY - rect.top - root.scrollTop
-  }
-  resetGame() {
-    BRICK_GRID.map((brick, index) => {
-      return BRICK_GRID[index]
-    })
   }
   updateAll() {
     this.move()

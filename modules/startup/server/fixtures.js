@@ -8,7 +8,7 @@ const BRICK_GRID = new Array(BRICK_COLUMNS * BRICK_ROWS).fill('red')
 Meteor.startup(() => {
   if (!GameBoard.findOne()) {
     BRICK_GRID.forEach(brick => {
-      GameBoard.insert({ color: 'red' })
+      GameBoard.insert({ color: '#f4f4f4' })
     })
   }
 })
