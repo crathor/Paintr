@@ -8,9 +8,17 @@ import Winner from '../Winner'
 import './styles.css'
 import Konva from 'konva'
 import { Meteor } from 'meteor/meteor'
-import { GAME_WIDTH, GAME_HEIGHT } from '../config'
+import {
+  GAME_WIDTH,
+  GAME_HEIGHT,
+  BRICK_COLUMNS,
+  BRICK_HEIGHT,
+  BRICK_WIDTH,
+  BRICK_GRID,
+  BRICK_GAP,
+  BRICK_ROWS
+} from '../config'
 
-const grid = 200
 class Game extends Component {
   constructor(props) {
     super(props)
@@ -36,6 +44,8 @@ class Game extends Component {
     this.framesPerSecond = 30
     setInterval(this.updateAll.bind(this), 1000 / this.framesPerSecond)
 
+    this.resetGame()
+
     window.onkeydown = e => {
       this.direction[e.key] = true
       console.log(e.key)
@@ -51,49 +61,53 @@ class Game extends Component {
       delete this.direction[e.key]
     }
   }
+  resetGame() {
+    BRICK_GRID.map((brick, index) => {
+      return (BRICK_GRID[index] = 'blue')
+    })
+  }
   updateAll() {
     this.move()
     this.drawAll()
   }
   drawAll() {
-    this.buildRect(0, 0, this.canvas.width, this.canvas.height, 'black')
-    this.drawPlayers()
+    this.colorRect(0, 0, this.canvas.width, this.canvas.height, 'black') //clear screen
+    this.drawGrid() // draw grid
+    this.drawPlayers() // draw players
   }
-  buildRect(topLeftX, topLeftY, boxWidth, boxHeight, fillColor) {
+  colorRect(topLeftX, topLeftY, boxWidth, boxHeight, fillColor) {
     this.ctx.fillStyle = fillColor
     this.ctx.fillRect(topLeftX, topLeftY, boxWidth, boxHeight)
+  }
+  colorCircle(centerX, centerY, radius, fillColor) {
+    this.ctx.fillStyle = fillColor
+    this.ctx.beginPath()
+    this.ctx.arc(centerX, centerY, radius, 0, Math.PI * 2, true)
+    this.ctx.fill()
   }
   drawPlayers() {
     if (this.props.players.length > 0) {
       this.props.players.forEach(player => {
-        this.ctx.fillStyle = player.color
-        this.ctx.beginPath()
-        this.ctx.arc(player.x, player.y, 10, 0, Math.PI * 2, true)
-        this.ctx.fill()
+        this.colorCircle(player.x, player.y, player.size, player.color)
       })
     } else {
       console.log('no')
     }
   }
-  generateGrid = () => {
-    const width = window.innerWidth
-    const Height = window.innerHeight
-    return GameGrid.map((grid, index) => {
-      if (index % 100 === 0) {
-        y += 20
+  drawGrid = () => {
+    for (let eachRow = 0; eachRow < BRICK_ROWS; eachRow++) {
+      for (let eachCol = 0; eachCol < BRICK_COLUMNS; eachCol++) {
+        this.colorRect(
+          BRICK_WIDTH * eachCol,
+          BRICK_HEIGHT * eachRow,
+          BRICK_WIDTH - BRICK_GAP,
+          BRICK_HEIGHT - BRICK_GAP,
+          BRICK_GRID[eachCol]
+        )
       }
-      if (index % 100 !== 0) {
-        x += 20
-      }
-      return (
-        <Rect key={index} width={20} height={20} x={x} y={y} fill={'black'} />
-      )
-    })
+    }
   }
   render() {
-    let x = 0
-    let y = 0
-    const GameGrid = Array(grid).fill('hello')
     const { players } = this.props
     console.log(players)
     return (

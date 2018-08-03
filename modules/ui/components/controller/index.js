@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import nipplejs from 'nipplejs'
 import { Meteor } from 'meteor/meteor'
 import './styles.css'
+import { BRICK_COLUMNS, BRICK_GRID } from '../config'
 
 class Controller extends Component {
   constructor(props) {
