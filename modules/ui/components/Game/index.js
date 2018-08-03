@@ -1,33 +1,33 @@
-import React, { Component } from "react";
-import { withTracker } from "meteor/react-meteor-data";
-import { Layer, Stage } from "react-konva";
-import Player from "../../components/Player";
-import { Players } from "../../../api/players";
-import Controller from "../../components/Controller";
-import Winner from "../Winner";
-import "./styles.css";
-import Konva from "konva";
+import React, { Component } from 'react'
+import { withTracker } from 'meteor/react-meteor-data'
+import { Layer, Stage } from 'react-konva'
+import Player from '../../components/Player'
+import { Players } from '../../../api/players'
+import { Dimensions } from '../../../api/dimensions'
+import Winner from '../Winner'
+import './styles.css'
+import Konva from 'konva'
+import { Meteor } from 'meteor/meteor'
 
 class Game extends Component {
   constructor(props) {
-    super(props);
+    super(props)
 
-    this.direction = {};
-    this.stageRef = React.createRef();
+    this.direction = {}
+    this.stageRef = React.createRef()
   }
 
   componentDidMount() {
-    console.log(Konva.Node);
-    console.log(this.stageRef.current);
+    Meteor.call('add.dimensions', window.innerHeight, window.innerWidth)
   }
   render() {
-    const { players } = this.props;
+    const { players } = this.props
     return (
-      <div style={{ display: "flex" }}>
+      <div style={{ display: 'flex' }}>
         <Stage
           width={window.innerWidth}
           height={window.innerHeight}
-          style={{ background: "#fff" }}
+          style={{ background: '#fff' }}
         >
           <Layer clearBeforeDraw={false}>
             {players.length
@@ -37,10 +37,9 @@ class Game extends Component {
               : null}
           </Layer>
         </Stage>
-        <Controller />
         <Winner />
       </div>
-    );
+    )
   }
 }
 
@@ -48,5 +47,5 @@ export default withTracker(() => {
   //Meteor.subscribe('players')
   return {
     players: Players.find({}).fetch()
-  };
-})(Game);
+  }
+})(Game)

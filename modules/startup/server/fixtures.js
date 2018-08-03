@@ -1,6 +1,6 @@
 import { Meteor } from 'meteor/meteor'
-import { Players } from '../../api/players'
+import { Dimensions } from '../../api/dimensions'
 
 Meteor.startup(() => {
-  Players.remove({})
+  Dimensions.update({ height: 100, width: 100 }, { upsert: true })
 })

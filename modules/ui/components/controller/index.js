@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import nipplejs from 'nipplejs'
 import { Meteor } from 'meteor/meteor'
+import { Dimensions } from '../../../api/dimensions'
 import './styles.css'
 
 class Controller extends Component {
@@ -27,6 +28,7 @@ class Controller extends Component {
     if ('dir:left' in this.direction) Meteor.call('move.left', Meteor.userId())
   }
   async componentDidMount() {
+    Meteor.call('dimensions.height')
     Meteor.call('add.player', 'asdwddwfew' + Math.random() * 1000)
     Meteor.call('get.player', Meteor.userId(), (err, res) => {
       this.setState({ player: res })
@@ -60,7 +62,6 @@ class Controller extends Component {
     }, 30)
   }
   render() {
-    console.log(this.state)
     return (
       <div
         ref={this.joystickZone}

@@ -36,7 +36,6 @@ Meteor.methods({
   },
   'move.up'(player) {
     const p = getPlayer(player)
-    console.log(dimensions)
     if (p.y <= 0 + p.size || !p) return
     Players.update({ player }, { $set: { y: p.y - p.speed } })
   },
