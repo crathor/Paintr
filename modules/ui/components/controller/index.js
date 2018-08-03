@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import nipplejs from 'nipplejs'
 import { Meteor } from 'meteor/meteor'
-import { Dimensions } from '../../../api/dimensions'
 import './styles.css'
 
 class Controller extends Component {
@@ -21,13 +20,12 @@ class Controller extends Component {
   }
   move() {
     if ('dir:up' in this.direction) Meteor.call('move.up', Meteor.userId())
-    if ('dir:down' in this.direction)
-      Meteor.call('move.down', Meteor.userId(), this.windowHeight)
+    if ('dir:down' in this.direction) Meteor.call('move.down', Meteor.userId())
     if ('dir:right' in this.direction)
-      Meteor.call('move.right', Meteor.userId(), this.windowWidth)
+      Meteor.call('move.right', Meteor.userId())
     if ('dir:left' in this.direction) Meteor.call('move.left', Meteor.userId())
   }
-  async componentDidMount() {
+  componentDidMount() {
     Meteor.call('dimensions.height')
     Meteor.call('add.player', 'asdwddwfew' + Math.random() * 1000)
     Meteor.call('get.player', Meteor.userId(), (err, res) => {
@@ -57,9 +55,11 @@ class Controller extends Component {
         this.direction = {}
       })
 
-    setInterval(() => {
-      window.requestAnimationFrame(this.move.bind(this))
-    }, 30)
+    this.framesPerSecond = 30
+    setInterval(this.updatePlayer.bind(this), 1000 / this.framesPerSecond)
+  }
+  updatePlayer() {
+    this.move()
   }
   render() {
     return (
