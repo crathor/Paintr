@@ -1,2 +1,2 @@
 import '../../api/players'
-import '../../api/dimensions'
+import '../../api/gameboard'

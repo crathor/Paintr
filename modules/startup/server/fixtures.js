@@ -1,6 +1,14 @@
 import { Meteor } from 'meteor/meteor'
-import { Dimensions } from '../../api/dimensions'
+import { GameBoard } from '../../api/gameboard'
+
+const BRICK_COLUMNS = 20
+const BRICK_ROWS = 16
+const BRICK_GRID = new Array(BRICK_COLUMNS * BRICK_ROWS).fill('red')
 
 Meteor.startup(() => {
-  Dimensions.update({ height: 100, width: 100 }, { upsert: true })
+  if (!GameBoard.findOne()) {
+    BRICK_GRID.forEach(brick => {
+      GameBoard.insert({ color: 'red' })
+    })
+  }
 })

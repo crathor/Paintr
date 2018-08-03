@@ -1,12 +1,10 @@
 import React, { Component } from 'react'
 import { withTracker } from 'meteor/react-meteor-data'
-import { Layer, Stage, Rect } from 'react-konva'
 import Player from '../../components/Player'
 import { Players } from '../../../api/players'
-import { Dimensions } from '../../../api/dimensions'
+import { GameBoard } from '../../../api/gameboard'
 import Winner from '../Winner'
 import './styles.css'
-import Konva from 'konva'
 import { Meteor } from 'meteor/meteor'
 import {
   GAME_WIDTH,
@@ -37,13 +35,13 @@ class Game extends Component {
   }
   componentDidMount() {
     Meteor.call('reset.players')
+    //Meteor.call('build.gameboard')
     this.mouseX = 0
     this.mouseY = 0
     this.canvas = document.getElementById('game')
     this.ctx = this.canvas.getContext('2d')
-
     this.framesPerSecond = 30
-    setInterval(this.updateAll.bind(this), 1000 / this.framesPerSecond)
+    this.init = false
 
     this.canvas.addEventListener(
       'mousemove',
@@ -53,7 +51,6 @@ class Game extends Component {
 
     window.onkeydown = e => {
       this.direction[e.key] = true
-      console.log(e.key)
       switch (e.key) {
         case 'Enter':
           Meteor.call('add.player', 'asdwddwfew' + Math.random() * 1000)
@@ -109,44 +106,63 @@ class Game extends Component {
   }
   drawPlayers() {
     if (this.props.players.length > 0) {
-      this.player = this.props.players[0]
-      console.log(
-        this.props.players.filter(player => player.player === Meteor.userId())
+      this.player = this.props.players.find(
+        player => player.player === Meteor.userId()
       )
       this.props.players.forEach(player => {
         this.colorCircle(player.x, player.y, player.size, player.color)
       })
-      const playerBrickCol = Math.floor(this.player.x / BRICK_WIDTH)
-      const playerBrickRow = Math.floor(this.player.y / BRICK_HEIGHT)
-      const brickIndex = this.rowColToArrayIndex(playerBrickCol, playerBrickRow)
-
-      if (brickIndex >= 0 && brickIndex < BRICK_COLUMNS * BRICK_ROWS) {
-        BRICK_GRID[brickIndex] = this.player.color
-      }
-    } else {
-      console.log('no')
     }
   }
   rowColToArrayIndex(col, row) {
     return col + BRICK_COLUMNS * row
   }
+  initGrid = () => {
+    const TILES = this.props.bricks
+    if (TILES.length > 0) {
+      for (let eachRow = 0; eachRow < BRICK_ROWS; eachRow++) {
+        for (let eachCol = 0; eachCol < BRICK_COLUMNS; eachCol++) {
+          const arrayIndex = this.rowColToArrayIndex(eachCol, eachRow)
+
+          GameBoard.update(
+            { _id: this.props.bricks[arrayIndex]._id },
+            { $set: { index: arrayIndex } },
+            { upsert: true }
+          )
+          this.colorRect(
+            BRICK_WIDTH * eachCol,
+            BRICK_HEIGHT * eachRow,
+            BRICK_WIDTH - BRICK_GAP,
+            BRICK_HEIGHT - BRICK_GAP,
+            TILES[arrayIndex].color
+          )
+        }
+      }
+    }
+    setInterval(this.updateAll.bind(this), 1000 / this.framesPerSecond)
+  }
   drawGrid = () => {
-    for (let eachRow = 0; eachRow < BRICK_ROWS; eachRow++) {
-      for (let eachCol = 0; eachCol < BRICK_COLUMNS; eachCol++) {
-        const arrayIndex = this.rowColToArrayIndex(eachCol, eachRow)
-        this.colorRect(
-          BRICK_WIDTH * eachCol,
-          BRICK_HEIGHT * eachRow,
-          BRICK_WIDTH - BRICK_GAP,
-          BRICK_HEIGHT - BRICK_GAP,
-          BRICK_GRID[arrayIndex]
-        )
+    const TILES = this.props.bricks
+    if (TILES.length > 0) {
+      for (let eachRow = 0; eachRow < BRICK_ROWS; eachRow++) {
+        for (let eachCol = 0; eachCol < BRICK_COLUMNS; eachCol++) {
+          const arrayIndex = this.rowColToArrayIndex(eachCol, eachRow)
+          this.colorRect(
+            BRICK_WIDTH * eachCol,
+            BRICK_HEIGHT * eachRow,
+            BRICK_WIDTH - BRICK_GAP,
+            BRICK_HEIGHT - BRICK_GAP,
+            TILES[arrayIndex].color
+          )
+        }
       }
     }
   }
   render() {
-    const { players } = this.props
-    console.log(players)
+    if (!this.init && this.props.bricks) {
+      this.init = true
+      this.initGrid()
+    }
     return (
       <div
         style={{
@@ -166,7 +182,7 @@ class Game extends Component {
 export default withTracker(() => {
   //Meteor.subscribe('players')
   return {
-    players: Players.find({}).fetch(),
-    player: Players.findOne({ player: Meteor.userId() })
+    bricks: GameBoard.find({}).fetch(),
+    players: Players.find({}).fetch()
   }
 })(Game)

@@ -6,3 +6,7 @@ export const BRICK_COLUMNS = 20
 export const BRICK_ROWS = 16
 export const BRICK_GAP = 2
 export const BRICK_GRID = new Array(BRICK_COLUMNS * BRICK_ROWS).fill('red')
+
+export const rowColToArrayIndex = (col, row) => {
+  return col + BRICK_COLUMNS * row
+}
