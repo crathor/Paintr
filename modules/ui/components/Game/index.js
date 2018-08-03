@@ -35,7 +35,6 @@ class Game extends Component {
   }
   componentDidMount() {
     Meteor.call('reset.players')
-    //Meteor.call('build.gameboard')
     this.mouseX = 0
     this.mouseY = 0
     this.canvas = document.getElementById('game')
@@ -168,11 +167,13 @@ class Game extends Component {
         style={{
           height: '100vh',
           display: 'flex',
-          justifyContent: 'center',
           alignItems: 'center'
         }}
       >
         <canvas id="game" width={GAME_WIDTH} height={GAME_HEIGHT} />
+        <div style={{ height: '100vh', background: 'pink' }}>
+          <h1>Paintr</h1>
+        </div>
         <Winner />
       </div>
     )
