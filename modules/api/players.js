@@ -28,7 +28,7 @@ Meteor.methods({
     Players.insert({
       name,
       color: Konva.Util.getRandomColor(),
-      size: 20,
+      size: 15,
       speed: 10,
       y: 0,
       x: 0,
