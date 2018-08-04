@@ -86,7 +86,7 @@ class Game extends Component {
     //   'yellow'
     // )
   }
-  colorRect(topLeftX, topLeftY, boxWidth, boxHeight, fillColor) {
+  colorRect(topLeftX, topLeftY, boxWidth, boxHeight, fillColor, text) {
     this.ctx.fillStyle = fillColor
     this.ctx.fillRect(topLeftX, topLeftY, boxWidth, boxHeight)
   }
@@ -119,10 +119,11 @@ class Game extends Component {
       for (let eachRow = 0; eachRow < BRICK_ROWS; eachRow++) {
         for (let eachCol = 0; eachCol < BRICK_COLUMNS; eachCol++) {
           const arrayIndex = this.rowColToArrayIndex(eachCol, eachRow)
-
+          let powerup = false
+          if (arrayIndex === 200 || arrayIndex === 89) powerup = true
           GameBoard.update(
             { _id: this.props.bricks[arrayIndex]._id },
-            { $set: { index: arrayIndex } },
+            { $set: { index: arrayIndex, powerup } },
             { upsert: true }
           )
           this.colorRect(
@@ -143,6 +144,7 @@ class Game extends Component {
       for (let eachRow = 0; eachRow < BRICK_ROWS; eachRow++) {
         for (let eachCol = 0; eachCol < BRICK_COLUMNS; eachCol++) {
           const arrayIndex = this.rowColToArrayIndex(eachCol, eachRow)
+
           this.colorRect(
             BRICK_WIDTH * eachCol,
             BRICK_HEIGHT * eachRow,
@@ -150,6 +152,14 @@ class Game extends Component {
             BRICK_HEIGHT - BRICK_GAP,
             TILES[arrayIndex].color
           )
+          if (TILES[arrayIndex].powerup) {
+            this.colorCircle(
+              BRICK_WIDTH * eachCol + 25,
+              BRICK_HEIGHT * eachRow + 25,
+              20,
+              'green'
+            )
+          }
         }
       }
     }

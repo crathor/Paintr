@@ -1,17 +1,14 @@
 import { METEOR } from 'meteor/meteor'
 import { Mongo } from 'meteor/mongo'
-
-const GAME_WIDTH = 1000
-const GAME_HEIGHT = 800
-const BRICK_HEIGHT = 50
-const BRICK_WIDTH = 50
-const BRICK_COLUMNS = 20
-const BRICK_ROWS = 16
-const BRICK_GAP = 2
-const BRICK_GRID = new Array(BRICK_COLUMNS * BRICK_ROWS).fill('red')
+import { BRICK_COLUMNS } from '../ui/components/config'
 
 const rowColToArrayIndex = (col, row) => {
   return col + BRICK_COLUMNS * row
+}
+
+if (Meteor.isServer) {
+  AccountsGuest.enabled = true
+  AccountsGuest.anonymous = true
 }
 
 export const GameBoard = new Mongo.Collection('gameboard')
@@ -23,5 +20,10 @@ Meteor.methods({
       { $set: { color: '#f4f4f4' } },
       { upsert: true, multi: true }
     )
+  },
+  'activate.powerup'(player, square) {
+    // apply powerup to player
+    // remove powerup from grid
+    // settimeout to remove powerup from player
   }
 })

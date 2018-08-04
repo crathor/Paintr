@@ -9,9 +9,9 @@ import {
   BRICK_HEIGHT,
   BRICK_WIDTH,
   BRICK_ROWS,
-  BRICK_GRID,
   rowColToArrayIndex
 } from '../ui/components/config'
+
 export const Players = new Mongo.Collection('players')
 
 if (Meteor.isServer) {
@@ -29,13 +29,20 @@ const checkCollision = player => {
     const playerBrickRow = Math.floor(player.y / BRICK_HEIGHT)
     const brickIndex = rowColToArrayIndex(playerBrickCol, playerBrickRow)
 
+    const brick = GameBoard.find({ index: brickIndex }).fetch()
+    if (brick[0].powerup) {
+      console.log('hit')
+      Players.update(player._id, { $set: { speed: 20 } }, { upsert: true })
+      setTimeout(() => {
+        Players.update(player._id, { $set: { speed: 5 } }, { upsert: true })
+      }, 2000)
+    }
     if (brickIndex >= 0 && brickIndex < BRICK_COLUMNS * BRICK_ROWS) {
       GameBoard.update(
         { index: brickIndex },
         { $set: { color: player.color } },
         { upsert: true }
       )
-      //(BRICK_GRID[brickIndex] = player.color)
     }
   }
 }
@@ -53,10 +60,10 @@ Meteor.methods({
     Players.insert({
       name,
       color: Konva.Util.getRandomColor(),
-      size: 15,
-      speed: 10,
-      y: 0,
-      x: 0,
+      size: 20,
+      speed: 5,
+      y: 100,
+      x: 100,
       player: Meteor.userId()
     })
   },

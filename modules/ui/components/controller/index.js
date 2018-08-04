@@ -33,7 +33,6 @@ class Controller extends Component {
     if ('dir:left' in this.direction) Meteor.call('move.left', Meteor.userId())
   }
   componentDidMount() {
-    Meteor.call('dimensions.height')
     Meteor.call('add.player', 'asdwddwfew' + Math.random() * 1000)
     Meteor.call('get.player', Meteor.userId(), (err, res) => {
       this.setState({ player: res })
