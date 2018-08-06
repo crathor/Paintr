@@ -165,7 +165,7 @@ class Game extends Component {
     }
   }
   render() {
-    if (!this.init && this.props.bricks) {
+    if (!this.init && this.props.bricks.length >= BRICK_COLUMNS * BRICK_ROWS) {
       this.init = true
       this.initGrid()
     }
@@ -180,6 +180,18 @@ class Game extends Component {
         <canvas id="game" width={GAME_WIDTH} height={GAME_HEIGHT} />
         <div style={{ height: '100vh', background: 'pink' }}>
           <h1>Paintr</h1>
+          <ul>
+            {this.props.players.map(player => {
+              return (
+                <li key={player._id}>
+                  <h3>{player.name}</h3>
+                  <p>{player.speed}</p>
+                  <p>{player.size}</p>
+                  <p>{player.color.toString()}</p>
+                </li>
+              )
+            })}
+          </ul>
         </div>
         <Winner />
       </div>

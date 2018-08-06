@@ -30,12 +30,9 @@ const checkCollision = player => {
     const brickIndex = rowColToArrayIndex(playerBrickCol, playerBrickRow)
 
     const brick = GameBoard.find({ index: brickIndex }).fetch()
+    console.log(brick[0].powerup)
     if (brick[0].powerup) {
-      console.log('hit')
       Players.update(player._id, { $set: { speed: 20 } }, { upsert: true })
-      setTimeout(() => {
-        Players.update(player._id, { $set: { speed: 5 } }, { upsert: true })
-      }, 2000)
     }
     if (brickIndex >= 0 && brickIndex < BRICK_COLUMNS * BRICK_ROWS) {
       GameBoard.update(
@@ -47,6 +44,9 @@ const checkCollision = player => {
   }
 }
 Meteor.methods({
+  'reset.playerspeed'(player) {
+    Players.update({ player }, { $set: { speed: 10 } })
+  },
   'reset.players'() {
     Players.remove({})
   },
@@ -61,7 +61,7 @@ Meteor.methods({
       name,
       color: Konva.Util.getRandomColor(),
       size: 20,
-      speed: 5,
+      speed: 10,
       y: 100,
       x: 100,
       player: Meteor.userId()
@@ -99,7 +99,7 @@ Meteor.methods({
   },
   'move.right'(player) {
     const p = getPlayer(player)
-    if (p.x >= GAME_WIDTH - p.size || !p) {
+    if (p.x >= GAME_WIDTH - p.size) {
       Players.update({ player }, { $set: { x: 0 } })
       checkCollision(p)
     } else {
