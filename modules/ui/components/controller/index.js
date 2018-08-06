@@ -19,10 +19,10 @@ class Controller extends Component {
       zone: this.joystickZone
     }
     this.direction = {}
-    this.windowHeight = window.innerHeight
-    this.windowWidth = window.innerWidth
     this.state = {
-      player: { color: 'orange' }
+      player: {
+        color: 'orange'
+      }
     }
   }
   move() {
@@ -33,7 +33,7 @@ class Controller extends Component {
     if ('dir:left' in this.direction) Meteor.call('move.left', Meteor.userId())
   }
   componentDidMount() {
-    Meteor.call('add.player', 'asdwddwfew' + Math.random() * 1000)
+    Meteor.call('add.player', 'asdf' + Math.random() * 1000)
     Meteor.call('get.player', Meteor.userId(), (err, res) => {
       this.setState({ player: res })
     })
@@ -72,7 +72,7 @@ class Controller extends Component {
       <div
         ref={this.joystickZone}
         style={{
-          background: this.state.player.color,
+          background: this.state.player.color || 'purple',
           width: '100vw',
           height: '100vh'
         }}

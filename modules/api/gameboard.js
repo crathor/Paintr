@@ -1,10 +1,5 @@
 import { METEOR } from 'meteor/meteor'
 import { Mongo } from 'meteor/mongo'
-import { BRICK_COLUMNS } from '../ui/components/config'
-
-const rowColToArrayIndex = (col, row) => {
-  return col + BRICK_COLUMNS * row
-}
 
 if (Meteor.isServer) {
   AccountsGuest.enabled = true
@@ -21,9 +16,11 @@ Meteor.methods({
       { upsert: true, multi: true }
     )
   },
-  'activate.powerup'(player, square) {
-    // apply powerup to player
-    // remove powerup from grid
-    // settimeout to remove powerup from player
+  'set.gameboard.color'(player) {
+    GameBoard.update(
+      {},
+      { $set: { color: player.color } },
+      { upsert: true, multi: true }
+    )
   }
 })

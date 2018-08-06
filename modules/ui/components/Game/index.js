@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { withTracker } from 'meteor/react-meteor-data'
-import Player from '../../components/Player'
+import PlayerList from '../../components/PlayerList'
 import { Players } from '../../../api/players'
 import { GameBoard } from '../../../api/gameboard'
 import Winner from '../Winner'
@@ -12,7 +12,6 @@ import {
   BRICK_COLUMNS,
   BRICK_HEIGHT,
   BRICK_WIDTH,
-  BRICK_GRID,
   BRICK_GAP,
   BRICK_ROWS
 } from '../config'
@@ -95,6 +94,9 @@ class Game extends Component {
     this.ctx.beginPath()
     this.ctx.arc(centerX, centerY, radius, 0, Math.PI * 2, true)
     this.ctx.fill()
+    this.ctx.lineWidth = 2
+    this.ctx.strokeStyle = '#000000'
+    this.ctx.stroke()
   }
   colorText(showWords, textX, textY, fillColor) {
     this.ctx.fillStyle = fillColor
@@ -120,7 +122,7 @@ class Game extends Component {
         for (let eachCol = 0; eachCol < BRICK_COLUMNS; eachCol++) {
           const arrayIndex = this.rowColToArrayIndex(eachCol, eachRow)
           let powerup = false
-          if (arrayIndex === 200 || arrayIndex === 89) powerup = true
+          if (arrayIndex === 200 || arrayIndex === 89) powerup = true // temp powerups
           GameBoard.update(
             { _id: this.props.bricks[arrayIndex]._id },
             { $set: { index: arrayIndex, powerup } },
@@ -153,6 +155,7 @@ class Game extends Component {
             TILES[arrayIndex].color
           )
           if (TILES[arrayIndex].powerup) {
+            // draws a powerup circle thats green
             this.colorCircle(
               BRICK_WIDTH * eachCol + 25,
               BRICK_HEIGHT * eachRow + 25,
@@ -166,6 +169,7 @@ class Game extends Component {
   }
   render() {
     if (!this.init && this.props.bricks.length >= BRICK_COLUMNS * BRICK_ROWS) {
+      // ensures the entire gameboard has been loaded in the server before starting
       this.init = true
       this.initGrid()
     }
@@ -180,18 +184,7 @@ class Game extends Component {
         <canvas id="game" width={GAME_WIDTH} height={GAME_HEIGHT} />
         <div style={{ height: '100vh', background: 'pink' }}>
           <h1>Paintr</h1>
-          <ul>
-            {this.props.players.map(player => {
-              return (
-                <li key={player._id}>
-                  <h3>{player.name}</h3>
-                  <p>{player.speed}</p>
-                  <p>{player.size}</p>
-                  <p>{player.color.toString()}</p>
-                </li>
-              )
-            })}
-          </ul>
+          <PlayerList players={this.props.players || []} />
         </div>
         <Winner />
       </div>
