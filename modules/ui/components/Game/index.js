@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { withTracker } from 'meteor/react-meteor-data'
-import Player from '../../components/Player'
+import PlayerList from '../../components/PlayerList'
 import { Players } from '../../../api/players'
 import { GameBoard } from '../../../api/gameboard'
 import Winner from '../Winner'
