@@ -30,8 +30,7 @@ class PlayerList extends Component {
                 key={player._id}
                 style={{
                   background: player.color,
-                  color: "#fff",
-                  backgroundSize: { count }
+                  color: "#fff"
                 }}
               >
                 <h3>name: {player.name}</h3>

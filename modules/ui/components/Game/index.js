@@ -4,6 +4,7 @@ import PlayerList from "../../components/PlayerList";
 import { Players } from "../../../api/players";
 import { GameBoard } from "../../../api/gameboard";
 import "./styles.css";
+import Timer from "../../components/Timer";
 import { Meteor } from "meteor/meteor";
 import {
   GAME_WIDTH,
@@ -47,10 +48,10 @@ class Game extends Component {
     window.onkeydown = e => {
       this.direction[e.key] = true;
       switch (e.key) {
-        case "Enter":
+        case "p":
           Meteor.call("add.player", "asdf" + Math.floor(Math.random() * 1000));
           break;
-        case "`":
+        case "Enter":
           Meteor.call("reset.gameboard");
           break;
         default:
@@ -194,6 +195,7 @@ class Game extends Component {
         <canvas id="game" width={GAME_WIDTH} height={GAME_HEIGHT} />
         <div style={{ height: "100vh", background: "pink" }}>
           <h1>Paintr</h1>
+          <Timer />
           <PlayerList
             players={this.props.players || []}
             bricks={this.props.bricks || []}
