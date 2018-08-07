@@ -193,7 +193,10 @@ class Game extends Component {
         <canvas id="game" width={GAME_WIDTH} height={GAME_HEIGHT} />
         <div style={{ height: '100vh', background: 'pink' }}>
           <h1>Paintr</h1>
-          <PlayerList players={this.props.players || []} />
+          <PlayerList
+            players={this.props.players || []}
+            bricks={this.props.bricks || []}
+          />
         </div>
         <Winner />
       </div>

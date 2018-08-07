@@ -73,8 +73,8 @@ class Controller extends Component {
         ref={this.joystickZone}
         style={{
           background: this.state.player.color || 'purple',
-          width: '100%',
-          height: '100%'
+          width: '100vw',
+          height: '100vh'
         }}
       >
         <div id="joystick-zone" />

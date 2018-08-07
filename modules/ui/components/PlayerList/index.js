@@ -3,7 +3,9 @@ import { Meteor } from 'meteor/meteor'
 
 class PlayerList extends Component {
   render() {
-    const { players } = this.props
+    const { players, bricks } = this.props
+    console.log(bricks)
+    // console.log(bricks.filter(brick => brick.color === players[0].color))
     return (
       <ul>
         {players.map(player => {
