@@ -34,6 +34,10 @@ const checkCollision = player => {
       if (!player.boost) {
         const power = Math.floor(Math.random() * 10)
         switch (power) {
+          case 7:
+            Meteor.call('freeze.players', player)
+            Meteor.call('unfreeze.players')
+            break
           case 8:
             Meteor.call('set.gameboard.color', player)
             break
@@ -42,10 +46,8 @@ const checkCollision = player => {
             break
 
           default:
-            Meteor.call('freeze.players', player)
-            Meteor.call('unfreeze.players')
-            // Meteor.call('boost.player', player)
-            // Meteor.call('remove.boost', player)
+            Meteor.call('boost.player', player)
+            Meteor.call('remove.boost', player)
             break
         }
         GameBoard.update(
