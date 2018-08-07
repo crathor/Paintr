@@ -2,19 +2,19 @@ import React, { Component } from 'react'
 import { Meteor } from 'meteor/meteor'
 
 class PlayerList extends Component {
-  getCount(arr, player) {
-    const count =
-      (arr.filter(brick => brick.color === player.color).length / arr.length) *
-      100
-    return count.toFixed(1)
-  }
+  // getCount(arr, player) {
+  //   const count =
+  //     (arr.filter(brick => brick.color === player.color).length / arr.length) *
+  //     100;
+  //   return count.toFixed(1);
+  // }
   render() {
     const { players, bricks } = this.props
     return (
       <ul>
         {players
           .map(player => {
-            const count = this.getCount(bricks, player)
+            const count = this.props.getCount(bricks, player)
             return (
               <li
                 key={player._id}
