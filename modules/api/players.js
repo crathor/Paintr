@@ -22,7 +22,6 @@ if (Meteor.isServer) {
 const getPlayer = player => {
   return Players.findOne({ player })
 }
-
 const checkCollision = player => {
   if (player) {
     const playerBrickCol = Math.floor(player.x / BRICK_WIDTH)

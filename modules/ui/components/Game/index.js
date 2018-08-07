@@ -27,7 +27,10 @@ class Game extends Component {
     this.state = {
       startGameTimer: false,
       show: false,
-      time: 0
+      winner: {
+        name: "",
+        color: ""
+      }
     };
     this.direction = {};
   }
@@ -182,45 +185,28 @@ class Game extends Component {
       }
     }
   };
-  closeModal() {
+  closeModal = () => {
     this.setState({
       show: false
     });
-  }
-
-  // returns percentage of gameboard owned by each player
-  getCount = (arr, player) => {
-    const count =
-      (arr.filter(brick => brick.color === player.color).length / arr.length) *
-      100;
-    return count.toFixed(1);
   };
-
-  // called when game timer expires, calculates winner
   calcWinner = () => {
-    let winnerArr = this.props.bricks.map(brick => brick.color);
-    function findWinner(arr) {
-      return arr
-        .sort(
-          (a, b) =>
-            arr.filter(v => v === a).length - arr.filter(v => v === b).length
-        )
-        .pop();
-    }
-    console.log(findWinner(winnerArr));
-    console.log("player;", this.props.players);
-    // alert(findWinner(winnerArr));
-    this.setState({ show: true });
-    if (findWinner(winnerArr) === "#f4f4f4") {
-      console.log("Get rekt by the House");
-    } else {
-      // let winnerName = this.props.players.filter(
-      //   player => player.color === findWinner(winnerArr)
-      // );
-      console.log("Winner is:", findWinner(winnerArr));
-    }
+    const { bricks, players } = this.props;
+    const brickColors = bricks.map(brick => brick.color);
+    const playerScores = players
+      .map(player => {
+        const count = brickColors.filter(color => color === player.color)
+          .length;
+        return {
+          ...player,
+          count
+        };
+      })
+      .sort((a, b) => a.count < b.count);
+    this.setState({ winner: playerScores[0], show: true });
   };
   render() {
+    const { winner } = this.state;
     if (!this.init && this.props.bricks.length >= BRICK_COLUMNS * BRICK_ROWS) {
       // ensures the entire gameboard has been loaded in the server before starting
       this.init = true;
@@ -239,13 +225,12 @@ class Game extends Component {
             calcWinner={this.calcWinner}
           />
           <PlayerList
-            getCount={(arr, player) => this.getCount(arr, player)}
             players={this.props.players || []}
             bricks={this.props.bricks || []}
           />
         </div>
         <Modal show={this.state.show} close={this.closeModal}>
-          <p>WINNNNNNNERRRRRRRRRR</p>
+          <p style={{ background: winner.color }}>{winner.name}</p>
         </Modal>
       </div>
     );
