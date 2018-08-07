@@ -14,17 +14,7 @@ class PlayerList extends Component {
       <ul>
         {players
           .map(player => {
-            if (player.powerup.reverse) {
-              setTimeout(() => {
-                Meteor.call("reset.player.reverse", player);
-              }, 5000);
-            }
             const count = this.getCount(bricks, player);
-            if (player.powerup.speed) {
-              setTimeout(() => {
-                Meteor.call("reset.player.speed", player);
-              }, 5000);
-            }
             return (
               <li
                 key={player._id}
@@ -35,7 +25,6 @@ class PlayerList extends Component {
               >
                 <h3>name: {player.name}</h3>
                 <p>speed: {player.speed}</p>
-                <p>{player.powers.join(",")}</p>
                 <p>size: {player.size}</p>
                 <p>Count: {count}%</p>
                 <button onClick={() => Meteor.call("boost.player", player)}>
