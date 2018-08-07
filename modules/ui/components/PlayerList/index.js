@@ -1,20 +1,28 @@
 import React, { Component } from 'react'
 import { Meteor } from 'meteor/meteor'
+import { BRICK_COLUMNS, BRICK_ROWS } from '../config'
 
 class PlayerList extends Component {
-  // getCount(arr, player) {
-  //   const count =
-  //     (arr.filter(brick => brick.color === player.color).length / arr.length) *
-  //     100;
-  //   return count.toFixed(1);
-  // }
+  getCountPercentage(count, arrayLength) {
+    const percentage = (count * 100) / arrayLength
+    return percentage.toFixed(1)
+  }
   render() {
     const { players, bricks } = this.props
+    const brickColors = bricks.map(brick => brick.color)
+    const playerList = players
+      .map(player => {
+        const count = brickColors.filter(color => color === player.color).length
+        return {
+          ...player,
+          count
+        }
+      })
+      .sort((a, b) => a.count < b.count)
     return (
       <ul>
-        {players
+        {playerList
           .map(player => {
-            const count = this.props.getCount(bricks, player)
             return (
               <li
                 key={player._id}
@@ -26,7 +34,9 @@ class PlayerList extends Component {
                 <h3>name: {player.name}</h3>
                 <p>speed: {player.speed}</p>
                 <p>size: {player.size}</p>
-                <p>Count: {count}%</p>
+                <p>
+                  Count: {this.getCountPercentage(player.count, bricks.length)}%
+                </p>
                 <button onClick={() => Meteor.call('boost.player', player)}>
                   speed
                 </button>
