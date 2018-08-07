@@ -30,6 +30,22 @@ class Timer extends Component {
   componentDidMount() {
     let timeLeftVar = this.secondsToTime(this.state.seconds);
     this.setState({ time: timeLeftVar });
+
+    window.onkeydown = e => {
+      switch (e.key) {
+        case "q":
+          console.log("pressed the q");
+          break;
+        case RESET_KEY:
+          Meteor.call("reset.timer");
+          Meteor.call("get.time", (err, res) => {
+            console.log(res);
+          });
+          break;
+        default:
+          break;
+      }
+    };
   }
 
   startTimer() {
@@ -37,6 +53,15 @@ class Timer extends Component {
       this.timer = setInterval(this.countDown, 1000);
     }
   }
+  // resetTimer() {
+  //   this.state = { time: {}, seconds: 120 };
+  // }
+  // componentDidUpdate(prevProps) {
+  //   if (prevProps.resetTimer !== this.props.resetTimer) {
+  //     this.resetTimer();
+  //     this.props.timerReset();
+  //   }
+  // }
 
   countDown() {
     // Remove one second, set state so a re-render happens.
