@@ -21,9 +21,6 @@ class Game extends Component {
     super(props)
 
     this.direction = {}
-    this.windowHeight = window.innerHeight
-    this.windowWidth = window.innerWidth
-    this.stageRef = React.createRef()
   }
   move() {
     if ('ArrowUp' in this.direction) Meteor.call('move.up', Meteor.userId())
@@ -50,7 +47,7 @@ class Game extends Component {
       this.direction[e.key] = true
       switch (e.key) {
         case 'Enter':
-          Meteor.call('add.player', 'asdwddwfew' + Math.random() * 1000)
+          Meteor.call('add.player', 'asdf' + Math.floor(Math.random() * 1000))
           break
         case '`':
           Meteor.call('reset.gameboard')
@@ -78,12 +75,14 @@ class Game extends Component {
     this.colorRect(0, 0, this.canvas.width, this.canvas.height, 'black') //clear screen
     this.drawGrid() // draw grid
     this.drawPlayers() // draw players
+
+    //USED FOR SEEING BLOCK INDEX LOCATIONS
     // this.colorText(
     //   `${mouseBrickCol},${mouseBrickRow}:${brickIndex}`,
     //   this.mouseX,
     //   this.mouseY,
     //   'yellow'
-    // )
+    // )'
   }
   colorRect(topLeftX, topLeftY, boxWidth, boxHeight, fillColor, text) {
     this.ctx.fillStyle = fillColor
@@ -122,7 +121,16 @@ class Game extends Component {
         for (let eachCol = 0; eachCol < BRICK_COLUMNS; eachCol++) {
           const arrayIndex = this.rowColToArrayIndex(eachCol, eachRow)
           let powerup = false
-          if (arrayIndex === 200 || arrayIndex === 89) powerup = true // temp powerups
+          if (
+            arrayIndex === 200 ||
+            arrayIndex === 89 ||
+            arrayIndex === 99 ||
+            arrayIndex === 109 ||
+            arrayIndex === 189 ||
+            arrayIndex === 0 ||
+            arrayIndex === 320
+          )
+            powerup = true // temp powerups
           GameBoard.update(
             { _id: this.props.bricks[arrayIndex]._id },
             { $set: { index: arrayIndex, powerup } },
@@ -138,6 +146,7 @@ class Game extends Component {
         }
       }
     }
+    Meteor.call('reset.gameboard')
     setInterval(this.updateAll.bind(this), 1000 / this.framesPerSecond)
   }
   drawGrid = () => {

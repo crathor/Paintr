@@ -30,16 +30,36 @@ const checkCollision = player => {
     const brickIndex = rowColToArrayIndex(playerBrickCol, playerBrickRow)
 
     const brick = GameBoard.find({ index: brickIndex }).fetch()
-    if (brick[0].powerup) {
-      //Meteor.call('boost.player', player)// adds player speed
-      //Meteor.call('reset.gameboard') // reset the whole board
-      // Meteor.call('set.gameboard.color', player) // player claims whole board
-      Meteor.call('reverse.player.direction', player)
-      GameBoard.update(
-        { index: brickIndex },
-        { $set: { powerup: false } },
-        { upsert: true }
-      )
+    if (brick[0].powerup && !player.powerup.speed) {
+      const powerChoice = Math.floor(Math.random() * 5)
+      let power
+      switch (powerChoice) {
+        case 0:
+          power = 'speed' // adds player speed
+          break
+        case 1:
+          power = 'bomb' // reset the whole board
+          break
+        case 2:
+          power = 'steal' // player claims whole board
+          break
+
+        default:
+          power = 'speed' // adds player speed
+          break
+      }
+      if (player.powers.length < 3) {
+        Players.update(
+          player._id,
+          { $set: { powers: [...player.powers, power] } },
+          { upsert: true }
+        )
+        GameBoard.update(
+          { index: brickIndex },
+          { $set: { powerup: false } },
+          { upsert: true }
+        )
+      }
     }
     if (brickIndex >= 0 && brickIndex < BRICK_COLUMNS * BRICK_ROWS) {
       GameBoard.update(
@@ -71,14 +91,17 @@ Meteor.methods({
     Players.insert({
       name,
       color: Konva.Util.getRandomColor(),
-      size: 20,
+      size: 10,
       speed: 10,
-      y: 100,
-      x: 100,
+      y: Math.floor(1 + Math.random() * GAME_HEIGHT),
+      x: Math.floor(1 + Math.random() * GAME_WIDTH),
       powerup: {
-        reverse: false,
-        speed: false
+        speed: false,
+        bomb: false,
+        steal: false
       },
+      powers: [],
+      reverse: false,
       player: Meteor.userId()
     })
   },
