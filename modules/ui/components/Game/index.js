@@ -71,7 +71,7 @@ class Game extends Component {
     this.drawAll()
   }
   drawAll() {
-    this.colorRect(0, 0, this.canvas.width, this.canvas.height, 'black') //clear screen
+    this.colorRect(0, 0, this.canvas.width, this.canvas.height, '#fff') //clear screen
     this.drawGrid() // draw grid
     this.drawPlayers() // draw players
 
@@ -165,9 +165,9 @@ class Game extends Component {
           if (TILES[arrayIndex].powerup) {
             // draws a powerup circle thats green
             this.colorCircle(
-              BRICK_WIDTH * eachCol + 25,
-              BRICK_HEIGHT * eachRow + 25,
-              20,
+              BRICK_WIDTH * eachCol + BRICK_HEIGHT / 2,
+              BRICK_HEIGHT * eachRow + BRICK_WIDTH / 2,
+              10,
               'green'
             )
           }
