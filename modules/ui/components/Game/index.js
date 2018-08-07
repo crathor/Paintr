@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
 import { withTracker } from 'meteor/react-meteor-data'
-import PlayerList from '../../components/PlayerList'
+import Player from '../../components/Player'
 import { Players } from '../../../api/players'
 import { GameBoard } from '../../../api/gameboard'
 import Winner from '../Winner'
+import SideBar from '../SideBar'
 import './styles.css'
 import { Meteor } from 'meteor/meteor'
 import {
@@ -199,6 +200,7 @@ class Game extends Component {
           />
         </div>
         <Winner />
+        <SideBar props={this.props} />
       </div>
     )
   }
