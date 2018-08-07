@@ -1,9 +1,10 @@
 import React, { Component } from "react";
 
 class Timer extends Component {
+  // seen on https://stackoverflow.com/questions/40885923/countdown-timer-in-react
   constructor() {
     super();
-    this.state = { time: {}, seconds: 10 };
+    this.state = { time: {}, seconds: 20 };
     this.timer = 0;
     this.startTimer = this.startTimer.bind(this);
     this.countDown = this.countDown.bind(this);
