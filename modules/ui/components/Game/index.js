@@ -19,7 +19,7 @@ import {
 class Game extends Component {
   constructor(props) {
     super(props);
-
+    this.state = { startGameTimer: false };
     this.direction = {};
   }
   move() {
@@ -39,7 +39,6 @@ class Game extends Component {
     this.ctx = this.canvas.getContext("2d");
     this.framesPerSecond = 30;
     this.init = false;
-
     this.canvas.addEventListener(
       "mousemove",
       this.updateMousePosition.bind(this)
@@ -52,6 +51,13 @@ class Game extends Component {
           Meteor.call("add.player", "asdf" + Math.floor(Math.random() * 1000));
           break;
         case "Enter":
+          Meteor.call("reset.gameboard");
+          this.setState(prevState => ({
+            startGameTimer: !prevState.startGameTimer
+          }));
+          break;
+        case "`":
+          Meteor.call("reset.players");
           Meteor.call("reset.gameboard");
           break;
         default:
@@ -178,6 +184,9 @@ class Game extends Component {
       }
     }
   };
+  calcWinner = () => {
+    console.log("winner");
+  };
   render() {
     if (!this.init && this.props.bricks.length >= BRICK_COLUMNS * BRICK_ROWS) {
       // ensures the entire gameboard has been loaded in the server before starting
@@ -195,7 +204,10 @@ class Game extends Component {
         <canvas id="game" width={GAME_WIDTH} height={GAME_HEIGHT} />
         <div style={{ height: "100vh", background: "pink" }}>
           <h1>Paintr</h1>
-          <Timer />
+          <Timer
+            start={this.state.startGameTimer}
+            calcWinner={this.calcWinner}
+          />
           <PlayerList
             players={this.props.players || []}
             bricks={this.props.bricks || []}
