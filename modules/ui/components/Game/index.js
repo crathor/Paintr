@@ -15,11 +15,15 @@ import {
   BRICK_GAP,
   BRICK_ROWS
 } from "../config";
+import Modal from "../Modal";
 
 class Game extends Component {
   constructor(props) {
     super(props);
-    this.state = { startGameTimer: false };
+    this.state = {
+      startGameTimer: false,
+      show: false
+    };
     this.direction = {};
   }
   move() {
@@ -49,6 +53,7 @@ class Game extends Component {
       switch (e.key) {
         case "p":
           Meteor.call("add.player", "asdf" + Math.floor(Math.random() * 1000));
+
           break;
         case "Enter":
           Meteor.call("reset.gameboard");
@@ -184,6 +189,11 @@ class Game extends Component {
       }
     }
   };
+  closeModal() {
+    this.setState({
+      show: false
+    });
+  }
   getCount = (arr, player) => {
     const count =
       (arr.filter(brick => brick.color === player.color).length / arr.length) *
@@ -202,14 +212,15 @@ class Game extends Component {
     }
     console.log(findWinner(winnerArr));
     console.log("player;", this.props.players);
-    alert(findWinner(winnerArr));
+    // alert(findWinner(winnerArr));
+    this.setState({ show: true });
     if (findWinner(winnerArr) === "#f4f4f4") {
       console.log("Get rekt by the House");
     } else {
-      let winnerName = this.props.players.filter(
-        player => player.color === findWinner(winnerArr)
-      );
-      console.log("Winner is:", winnerName.name);
+      // let winnerName = this.props.players.filter(
+      //   player => player.color === findWinner(winnerArr)
+      // );
+      console.log("Winner is:", findWinner(winnerArr));
     }
   };
   render() {
@@ -219,16 +230,13 @@ class Game extends Component {
       this.initGrid();
     }
     return (
-      <div
-        style={{
-          height: "100vh",
-          display: "flex",
-          alignItems: "center"
-        }}
-      >
+      <div style={{ height: "100vh", display: "flex", alignItems: "center" }}>
         <canvas id="game" width={GAME_WIDTH} height={GAME_HEIGHT} />
         <div style={{ height: "100vh", background: "pink" }}>
           <h1>Paintr</h1>
+          <p>Controls</p>
+          <p>'Enter' -Start</p>
+          <p>' ` ' -Reset</p>
           <Timer
             start={this.state.startGameTimer}
             calcWinner={this.calcWinner}
@@ -239,6 +247,9 @@ class Game extends Component {
             bricks={this.props.bricks || []}
           />
         </div>
+        <Modal show={this.state.show} close={this.closeModal}>
+          <p>WINNNNNNNERRRRRRRRRR</p>
+        </Modal>
       </div>
     );
   }

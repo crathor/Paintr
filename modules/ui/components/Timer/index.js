@@ -56,7 +56,10 @@ class Timer extends Component {
   render() {
     return (
       <div>
-        <button onClick={this.props.start ? this.startTimer() : null}>
+        <button
+          style={{ display: "none" }}
+          onClick={this.props.start ? this.startTimer() : null}
+        >
           Start
         </button>
         m: {this.state.time.m} s: {this.state.time.s}
