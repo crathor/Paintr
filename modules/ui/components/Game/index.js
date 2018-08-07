@@ -3,8 +3,6 @@ import { withTracker } from 'meteor/react-meteor-data'
 import PlayerList from '../../components/PlayerList'
 import { Players } from '../../../api/players'
 import { GameBoard } from '../../../api/gameboard'
-import Winner from '../Winner'
-import SideBar from '../SideBar'
 import './styles.css'
 import { Meteor } from 'meteor/meteor'
 import {
@@ -199,8 +197,6 @@ class Game extends Component {
             bricks={this.props.bricks || []}
           />
         </div>
-        <Winner />
-        <SideBar props={this.props} />
       </div>
     )
   }
