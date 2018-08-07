@@ -13,7 +13,6 @@ import {
   BRICK_COLUMNS,
   BRICK_HEIGHT,
   BRICK_WIDTH,
-  BRICK_GRID,
   BRICK_GAP,
   BRICK_ROWS
 } from "../config";
@@ -23,9 +22,6 @@ class Game extends Component {
     super(props);
 
     this.direction = {};
-    this.windowHeight = window.innerHeight;
-    this.windowWidth = window.innerWidth;
-    this.stageRef = React.createRef();
   }
   move() {
     if ("ArrowUp" in this.direction) Meteor.call("move.up", Meteor.userId());
@@ -54,7 +50,7 @@ class Game extends Component {
       this.direction[e.key] = true;
       switch (e.key) {
         case "Enter":
-          Meteor.call("add.player", "asdwddwfew" + Math.random() * 1000);
+          Meteor.call("add.player", "asdf" + Math.floor(Math.random() * 1000));
           break;
         case "`":
           Meteor.call("reset.gameboard");
@@ -82,14 +78,16 @@ class Game extends Component {
     this.colorRect(0, 0, this.canvas.width, this.canvas.height, "black"); //clear screen
     this.drawGrid(); // draw grid
     this.drawPlayers(); // draw players
+
+    //USED FOR SEEING BLOCK INDEX LOCATIONS
     // this.colorText(
     //   `${mouseBrickCol},${mouseBrickRow}:${brickIndex}`,
     //   this.mouseX,
     //   this.mouseY,
     //   'yellow'
-    // )
+    // )'
   }
-  colorRect(topLeftX, topLeftY, boxWidth, boxHeight, fillColor) {
+  colorRect(topLeftX, topLeftY, boxWidth, boxHeight, fillColor, text) {
     this.ctx.fillStyle = fillColor;
     this.ctx.fillRect(topLeftX, topLeftY, boxWidth, boxHeight);
   }
@@ -98,6 +96,9 @@ class Game extends Component {
     this.ctx.beginPath();
     this.ctx.arc(centerX, centerY, radius, 0, Math.PI * 2, true);
     this.ctx.fill();
+    this.ctx.lineWidth = 2;
+    this.ctx.strokeStyle = "#000000";
+    this.ctx.stroke();
   }
   colorText(showWords, textX, textY, fillColor) {
     this.ctx.fillStyle = fillColor;
@@ -122,10 +123,20 @@ class Game extends Component {
       for (let eachRow = 0; eachRow < BRICK_ROWS; eachRow++) {
         for (let eachCol = 0; eachCol < BRICK_COLUMNS; eachCol++) {
           const arrayIndex = this.rowColToArrayIndex(eachCol, eachRow);
-
+          let powerup = false;
+          if (
+            arrayIndex === 200 ||
+            arrayIndex === 89 ||
+            arrayIndex === 99 ||
+            arrayIndex === 109 ||
+            arrayIndex === 189 ||
+            arrayIndex === 0 ||
+            arrayIndex === 320
+          )
+            powerup = true; // temp powerups
           GameBoard.update(
             { _id: this.props.bricks[arrayIndex]._id },
-            { $set: { index: arrayIndex } },
+            { $set: { index: arrayIndex, powerup } },
             { upsert: true }
           );
           this.colorRect(
@@ -138,6 +149,7 @@ class Game extends Component {
         }
       }
     }
+    Meteor.call("reset.gameboard");
     setInterval(this.updateAll.bind(this), 1000 / this.framesPerSecond);
   };
   drawGrid = () => {
@@ -146,6 +158,7 @@ class Game extends Component {
       for (let eachRow = 0; eachRow < BRICK_ROWS; eachRow++) {
         for (let eachCol = 0; eachCol < BRICK_COLUMNS; eachCol++) {
           const arrayIndex = this.rowColToArrayIndex(eachCol, eachRow);
+
           this.colorRect(
             BRICK_WIDTH * eachCol,
             BRICK_HEIGHT * eachRow,
@@ -153,12 +166,22 @@ class Game extends Component {
             BRICK_HEIGHT - BRICK_GAP,
             TILES[arrayIndex].color
           );
+          if (TILES[arrayIndex].powerup) {
+            // draws a powerup circle thats green
+            this.colorCircle(
+              BRICK_WIDTH * eachCol + 25,
+              BRICK_HEIGHT * eachRow + 25,
+              20,
+              "green"
+            );
+          }
         }
       }
     }
   };
   render() {
-    if (!this.init && this.props.bricks) {
+    if (!this.init && this.props.bricks.length >= BRICK_COLUMNS * BRICK_ROWS) {
+      // ensures the entire gameboard has been loaded in the server before starting
       this.init = true;
       this.initGrid();
     }
