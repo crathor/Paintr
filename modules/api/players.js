@@ -32,11 +32,22 @@ const checkCollision = player => {
     const brick = GameBoard.find({ index: brickIndex }).fetch()
     if (brick[0].powerup) {
       if (!player.boost) {
-        Players.update(
-          player._id,
-          { $set: { speed: 20, boost: true } },
-          { upsert: true }
-        )
+        const power = Math.floor(Math.random() * 10)
+        switch (power) {
+          case 8:
+            Meteor.call('set.gameboard.color', player)
+            break
+          case 9:
+            Meteor.call('reset.gameboard')
+            break
+
+          default:
+            Meteor.call('freeze.players', player)
+            Meteor.call('unfreeze.players')
+            // Meteor.call('boost.player', player)
+            // Meteor.call('remove.boost', player)
+            break
+        }
         GameBoard.update(
           { index: brickIndex },
           { $set: { powerup: false } },
@@ -67,6 +78,25 @@ Meteor.methods({
   'get.player'(id) {
     return getPlayer(id)
   },
+  'freeze.players'(player) {
+    Players.update(
+      { color: { $ne: player.color } },
+      { $set: { speed: 0, frozen: true } },
+      {
+        upsert: true,
+        multi: true
+      }
+    )
+  },
+  'unfreeze.players'() {
+    Meteor.setTimeout(() => {
+      Players.update(
+        {},
+        { $set: { speed: 10, frozen: false } },
+        { upsert: true, multi: true }
+      )
+    }, 5000)
+  },
   'remove.player'(player) {
     Players.remove({ player })
   },
@@ -80,16 +110,25 @@ Meteor.methods({
       y: Math.floor(1 + Math.random() * GAME_HEIGHT),
       x: Math.floor(1 + Math.random() * GAME_WIDTH),
       boost: false,
-      reverse: false,
+      frozen: false,
       player: Meteor.userId()
     })
   },
   'boost.player'(player) {
     Players.update(
       player._id,
-      { $set: { speed: 20, 'powerup.speed': true } },
+      { $set: { speed: 20, boost: true } },
       { upsert: true }
     )
+  },
+  'remove.boost'(player) {
+    Meteor.setTimeout(() => {
+      Players.update(
+        player._id,
+        { $set: { speed: 10, boost: false } },
+        { upsert: true }
+      )
+    }, 5000)
   },
   'reverse.player.direction'(player) {
     if (player.powerup.reverse) return
