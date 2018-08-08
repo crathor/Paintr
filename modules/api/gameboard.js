@@ -3,6 +3,9 @@ import { Mongo } from 'meteor/mongo'
 import { BRICK_COLUMNS, BRICK_ROWS } from '../ui/components/config'
 
 if (Meteor.isServer) {
+  Meteor.publish('gameboard', () => {
+    return GameBoard.find({})
+  })
   AccountsGuest.enabled = true
   AccountsGuest.anonymous = true
 }

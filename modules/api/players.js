@@ -15,6 +15,12 @@ import {
 export const Players = new Mongo.Collection('players')
 
 if (Meteor.isServer) {
+  Meteor.publish('players', () => {
+    return Players.find({})
+  })
+  Meteor.publish('player', () => {
+    return Players.findOne({ player: Meteor.userId() })
+  })
   AccountsGuest.enabled = true
   AccountsGuest.anonymous = true
 }

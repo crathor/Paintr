@@ -1,3 +1,2 @@
-import "../../api/players";
-import "../../api/gameboard";
-import "../../api/timer";
+import '../../api/players'
+import '../../api/gameboard'

@@ -1,33 +1,35 @@
-import React, { Component } from "react";
-import Joystick from "./Joystick";
-import { Meteor } from "meteor/meteor";
+import React, { Component } from 'react'
+import Joystick from './Joystick'
+import { Meteor } from 'meteor/meteor'
 
 class Controller extends Component {
   state = {
     playerCreated: false,
-    name: "",
+    name: '',
     player: {}
-  };
+  }
   handleChange = event => {
-    this.setState({ name: event.target.value });
-  };
+    if (event.target.value.length > 8) return
+    this.setState({ name: event.target.value })
+  }
 
   handleSubmit = e => {
-    e.preventDefault();
+    e.preventDefault()
+    if (this.state.name === '') return
     this.setState(
       {
         playerCreated: true
       },
-      () => {
-        Meteor.call("add.player", this.state.name);
-        Meteor.call("get.player", Meteor.userId(), (err, res) => {
-          this.setState({ player: res });
-        });
+      async () => {
+        await Meteor.call('add.player', this.state.name)
+        Meteor.call('get.player', Meteor.userId(), (err, res) => {
+          this.setState({ player: res })
+        })
       }
-    );
-  };
+    )
+  }
   render() {
-    const { playerCreated, player } = this.state;
+    const { playerCreated, player } = this.state
     return (
       <div>
         {playerCreated ? (
@@ -48,7 +50,7 @@ class Controller extends Component {
           </div>
         )}
       </div>
-    );
+    )
   }
 }
-export default Controller;
+export default Controller
