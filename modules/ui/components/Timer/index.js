@@ -5,9 +5,12 @@ class Timer extends Component {
   // seen on https://stackoverflow.com/questions/40885923/countdown-timer-in-react
   constructor() {
     super()
-    this.state = { timer: 0, time: {}, seconds: 60, pause: true }
-    this.startTimer = this.startTimer.bind(this)
-    this.countDown = this.countDown.bind(this)
+    this.state = {
+      timer: 0,
+      time: {},
+      seconds: 60,
+      pause: true
+    }
   }
 
   secondsToTime = secs => {
@@ -35,6 +38,8 @@ class Timer extends Component {
   startTimer = () => {
     this.interval = setInterval(this.countDown, 1000)
     this.setState({ pause: false })
+    if (this.state.seconds >= 60 || this.state.seconds === 0)
+      Meteor.call('reset.gameboard')
   }
 
   stopTimer = () => {
@@ -48,7 +53,8 @@ class Timer extends Component {
       timer: 0,
       paused: true,
       time: this.secondsToTime(this.state.seconds),
-      seconds: 120
+      seconds: 120,
+      pause: true
     })
   }
   countDown = () => {
@@ -76,6 +82,7 @@ class Timer extends Component {
         <div className="buttonContainer">
           <button
             className="start"
+            disabled={this.props.disabled}
             onClick={this.state.pause ? this.startTimer : this.stopTimer}
           >
             {this.state.pause ? 'Start' : 'Pause'}

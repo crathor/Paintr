@@ -47,7 +47,7 @@ class Game extends Component {
     this.mouseY = 0
     this.canvas = document.getElementById('game')
     this.ctx = this.canvas.getContext('2d')
-    this.framesPerSecond = 60
+    this.framesPerSecond = 30
     this.init = false
     this.canvas.addEventListener(
       'mousemove',
@@ -59,12 +59,6 @@ class Game extends Component {
       switch (e.key) {
         case ADD_PLAYER_KEY:
           Meteor.call('add.player', 'asdf' + Math.floor(Math.random() * 1000))
-          break
-        case START_KEY:
-          Meteor.call('reset.gameboard')
-          this.setState(prevState => ({
-            startGameTimer: !prevState.startGameTimer
-          }))
           break
         case RESET_KEY:
           Meteor.call('reset.players')
