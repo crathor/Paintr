@@ -4,6 +4,28 @@ import DebugView from "react-nipple/lib/DebugView";
 import "react-nipple/lib/styles.css";
 class Joystick extends Component {
   state = { data: {} };
+  componentDidMount() {}
+  handleEvent = (evt, data) => {
+    this.setState({ data });
+    // console.log(data.direction.x == "left");
+    // switch (data.direction) {
+    //   case data.direction.x == "left":
+    //     console.log("move left");
+    //     break;
+    // }
+    if (data.direction.x === "left") {
+      console.log("move left");
+    } else if (data.direction.x === "right") {
+      console.log("move right");
+    }
+
+    if (data.direction.y === "up") {
+      console.log("move up");
+    } else if (data.direction.y === "down") {
+      console.log("move down");
+    }
+  };
+
   render() {
     return (
       <div>
@@ -32,10 +54,6 @@ class Joystick extends Component {
       </div>
     );
   }
-  handleEvent = (evt, data) => {
-    console.log(evt);
-    this.setState({ data });
-  };
 }
 
 export default Joystick;

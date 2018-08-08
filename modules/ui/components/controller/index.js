@@ -1,10 +1,12 @@
 import React, { Component } from "react";
 import Joystick from "./Joystick";
+import { Meteor } from "meteor/meteor";
 
 class Controller extends Component {
   state = {
     playerCreated: false,
-    name: ""
+    name: "",
+    player: {}
   };
   handleChange = event => {
     this.setState({ name: event.target.value });
@@ -14,20 +16,22 @@ class Controller extends Component {
     e.preventDefault();
     this.setState(
       {
-        playerCreated: true,
-        name: ""
+        playerCreated: true
       },
       () => {
-        console.log("a name was sumbmitted", this.state.name);
+        Meteor.call("add.player", this.state.name);
+        Meteor.call("get.player", Meteor.userId(), (err, res) => {
+          this.setState({ player: res });
+        });
       }
     );
   };
   render() {
-    const { playerCreated } = this.state;
+    const { playerCreated, player } = this.state;
     return (
       <div>
         {playerCreated ? (
-          <Joystick />
+          <Joystick player={player} />
         ) : (
           <div>
             <form onSubmit={this.handleSubmit}>
