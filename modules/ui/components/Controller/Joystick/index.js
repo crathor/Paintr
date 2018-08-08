@@ -1,14 +1,8 @@
 import React, { Component } from "react";
 import ReactNipple from "react-nipple";
-import DebugView from "react-nipple/lib/DebugView";
 import "react-nipple/lib/styles.css";
 import { Meteor } from "meteor/meteor";
 class Joystick extends Component {
-  constructor(props) {
-    super(props);
-  }
-
-  componentDidMount() {}
   handleEvent = (evt, data) => {
     console.log(evt.type, data.angle);
     const { degree } = data.angle;
