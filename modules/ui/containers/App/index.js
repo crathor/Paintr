@@ -1,6 +1,7 @@
-import React, { Component } from 'react'
-import { BrowserRouter as Router } from 'react-router-dom'
-import Routes from '../../routes'
+import React, { Component } from "react";
+import { BrowserRouter as Router } from "react-router-dom";
+import Routes from "../../routes";
+import "./index.css";
 
 class App extends Component {
   render() {
@@ -8,8 +9,8 @@ class App extends Component {
       <Router>
         <Routes />
       </Router>
-    )
+    );
   }
 }
 
-export default App
+export default App;

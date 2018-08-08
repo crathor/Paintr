@@ -1,12 +1,12 @@
-import React, { Component } from 'react'
-import { withTracker } from 'meteor/react-meteor-data'
-import PlayerList from '../../components/PlayerList'
-import { Players } from '../../../api/players'
-import { GameBoard } from '../../../api/gameboard'
-import { Time } from '../../../api/timer'
-import './styles.css'
-import Timer from '../../components/Timer'
-import { Meteor } from 'meteor/meteor'
+import React, { Component } from "react";
+import { withTracker } from "meteor/react-meteor-data";
+import PlayerList from "../../components/PlayerList";
+import { Players } from "../../../api/players";
+import { GameBoard } from "../../../api/gameboard";
+import { Time } from "../../../api/timer";
+import "./styles/styles.css";
+import Timer from "../../components/Timer";
+import { Meteor } from "meteor/meteor";
 import {
   GAME_WIDTH,
   GAME_HEIGHT,
@@ -18,81 +18,83 @@ import {
   RESET_KEY,
   START_KEY,
   ADD_PLAYER_KEY
-} from '../config'
-import Modal from '../Modal'
+} from "../config";
+import Modal from "../Modal";
 
 class Game extends Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       startGameTimer: false,
       show: false,
       winner: {
-        name: '',
-        color: ''
+        name: "",
+        color: ""
       }
-    }
-    this.direction = {}
+    };
+    this.direction = {};
   }
   move() {
-    if ('ArrowUp' in this.direction) Meteor.call('move.up', Meteor.userId())
-    if ('ArrowDown' in this.direction) Meteor.call('move.down', Meteor.userId())
-    if ('ArrowRight' in this.direction)
-      Meteor.call('move.right', Meteor.userId())
-    if ('ArrowLeft' in this.direction) Meteor.call('move.left', Meteor.userId())
+    if ("ArrowUp" in this.direction) Meteor.call("move.up", Meteor.userId());
+    if ("ArrowDown" in this.direction)
+      Meteor.call("move.down", Meteor.userId());
+    if ("ArrowRight" in this.direction)
+      Meteor.call("move.right", Meteor.userId());
+    if ("ArrowLeft" in this.direction)
+      Meteor.call("move.left", Meteor.userId());
   }
   componentDidMount() {
-    Meteor.call('reset.players')
-    this.mouseX = 0
-    this.mouseY = 0
-    this.canvas = document.getElementById('game')
-    this.ctx = this.canvas.getContext('2d')
-    this.framesPerSecond = 60
-    this.init = false
+    Meteor.call("reset.players");
+    this.mouseX = 0;
+    this.mouseY = 0;
+    this.canvas = document.getElementById("game");
+    this.ctx = this.canvas.getContext("2d");
+    this.framesPerSecond = 60;
+    this.init = false;
     this.canvas.addEventListener(
-      'mousemove',
+      "mousemove",
       this.updateMousePosition.bind(this)
-    )
+    );
 
     window.onkeydown = e => {
-      this.direction[e.key] = true
+      this.direction[e.key] = true;
       switch (e.key) {
         case ADD_PLAYER_KEY:
-          Meteor.call('add.player', 'asdf' + Math.floor(Math.random() * 1000))
-          break
+          Meteor.call("add.player", "asdf" + Math.floor(Math.random() * 1000));
+          break;
         case START_KEY:
-          Meteor.call('reset.gameboard')
+          Meteor.call("reset.gameboard");
           this.setState(prevState => ({
             startGameTimer: !prevState.startGameTimer
-          }))
-          break
+          }));
+          break;
         case RESET_KEY:
-          Meteor.call('reset.players')
-          Meteor.call('reset.gameboard')
-          break
+          Meteor.call("reset.players");
+          Meteor.call("reset.gameboard");
+          break;
         default:
-          break
+          break;
       }
-    }
+    };
     window.onkeyup = e => {
-      delete this.direction[e.key]
-    }
+      delete this.direction[e.key];
+    };
   }
   updateMousePosition(e) {
-    const rect = this.canvas.getBoundingClientRect()
-    const root = document.documentElement
+    const rect = this.canvas.getBoundingClientRect();
+    const root = document.documentElement;
 
-    this.mouseX = e.clientX - rect.left - root.scrollLeft
-    this.mouseY = e.clientY - rect.top - root.scrollTop
+    this.mouseX = e.clientX - rect.left - root.scrollLeft;
+    this.mouseY = e.clientY - rect.top - root.scrollTop;
   }
   updateAll() {
-    this.move()
-    this.drawAll()
+    this.move();
+    this.drawAll();
   }
   drawAll() {
-    this.colorRect(0, 0, this.canvas.width, this.canvas.height, '#000') //clear screen
-    this.drawGrid() // draw grid
-    this.drawPlayers() // draw players
+    this.colorRect(0, 0, this.canvas.width, this.canvas.height, "#000"); //clear screen
+    this.drawGrid(); // draw grid
+    this.drawPlayers(); // draw players
 
     //USED FOR SEEING BLOCK INDEX LOCATIONS
     // this.colorText(
@@ -103,65 +105,65 @@ class Game extends Component {
     // )'
   }
   colorRect(topLeftX, topLeftY, boxWidth, boxHeight, fillColor, text) {
-    this.ctx.fillStyle = fillColor
-    this.ctx.fillRect(topLeftX, topLeftY, boxWidth, boxHeight)
+    this.ctx.fillStyle = fillColor;
+    this.ctx.fillRect(topLeftX, topLeftY, boxWidth, boxHeight);
   }
   colorCircle(centerX, centerY, radius, fillColor) {
-    this.ctx.fillStyle = fillColor
-    this.ctx.beginPath()
-    this.ctx.arc(centerX, centerY, radius, 0, Math.PI * 2, true)
-    this.ctx.fill()
-    this.ctx.lineWidth = 2
-    this.ctx.strokeStyle = '#000000'
-    this.ctx.stroke()
+    this.ctx.fillStyle = fillColor;
+    this.ctx.beginPath();
+    this.ctx.arc(centerX, centerY, radius, 0, Math.PI * 2, true);
+    this.ctx.fill();
+    this.ctx.lineWidth = 2;
+    this.ctx.strokeStyle = "#000000";
+    this.ctx.stroke();
   }
   colorText(showWords, textX, textY, fillColor) {
-    this.ctx.fillStyle = fillColor
-    this.ctx.fillText(showWords, textX, textY)
+    this.ctx.fillStyle = fillColor;
+    this.ctx.fillText(showWords, textX, textY);
   }
   drawPlayers() {
     if (this.props.players.length > 0) {
       this.player = this.props.players.find(
         player => player.player === Meteor.userId()
-      )
+      );
       this.props.players.forEach(player => {
-        this.colorCircle(player.x, player.y, player.size, player.color)
-      })
+        this.colorCircle(player.x, player.y, player.size, player.color);
+      });
     }
   }
   rowColToArrayIndex(col, row) {
-    return col + BRICK_COLUMNS * row
+    return col + BRICK_COLUMNS * row;
   }
   initGrid = () => {
-    const TILES = this.props.bricks
+    const TILES = this.props.bricks;
     if (TILES.length > 0) {
       for (let eachRow = 0; eachRow < BRICK_ROWS; eachRow++) {
         for (let eachCol = 0; eachCol < BRICK_COLUMNS; eachCol++) {
-          const arrayIndex = this.rowColToArrayIndex(eachCol, eachRow)
+          const arrayIndex = this.rowColToArrayIndex(eachCol, eachRow);
           GameBoard.update(
             { _id: this.props.bricks[arrayIndex]._id },
             { $set: { index: arrayIndex, powerup: false } },
             { upsert: true }
-          )
+          );
           this.colorRect(
             BRICK_WIDTH * eachCol,
             BRICK_HEIGHT * eachRow,
             BRICK_WIDTH - BRICK_GAP,
             BRICK_HEIGHT - BRICK_GAP,
             TILES[arrayIndex].color
-          )
+          );
         }
       }
     }
-    Meteor.call('reset.gameboard')
-    setInterval(this.updateAll.bind(this), 1000 / this.framesPerSecond)
-  }
+    Meteor.call("reset.gameboard");
+    setInterval(this.updateAll.bind(this), 1000 / this.framesPerSecond);
+  };
   drawGrid = () => {
-    const TILES = this.props.bricks
+    const TILES = this.props.bricks;
     if (TILES.length > 0) {
       for (let eachRow = 0; eachRow < BRICK_ROWS; eachRow++) {
         for (let eachCol = 0; eachCol < BRICK_COLUMNS; eachCol++) {
-          const arrayIndex = this.rowColToArrayIndex(eachCol, eachRow)
+          const arrayIndex = this.rowColToArrayIndex(eachCol, eachRow);
 
           this.colorRect(
             BRICK_WIDTH * eachCol,
@@ -169,54 +171,52 @@ class Game extends Component {
             BRICK_WIDTH - BRICK_GAP,
             BRICK_HEIGHT - BRICK_GAP,
             TILES[arrayIndex].color
-          )
+          );
           if (TILES[arrayIndex].powerup) {
             // draws a powerup circle thats green
             this.colorCircle(
               BRICK_WIDTH * eachCol + BRICK_HEIGHT / 2,
               BRICK_HEIGHT * eachRow + BRICK_WIDTH / 2,
               10,
-              'green'
-            )
+              "green"
+            );
           }
         }
       }
     }
-  }
-  closeModal = () => {
-    this.setState({
-      show: false
-    })
-  }
+  };
   calcWinner = () => {
-    const { bricks, players } = this.props
-    const brickColors = bricks.map(brick => brick.color)
+    const { bricks, players } = this.props;
+    const brickColors = bricks.map(brick => brick.color);
     const playerScores = players
       .map(player => {
-        const count = brickColors.filter(color => color === player.color).length
+        const count = brickColors.filter(color => color === player.color)
+          .length;
         return {
           ...player,
           count
-        }
+        };
       })
-      .sort((a, b) => a.count < b.count)
-    this.setState({ winner: playerScores[0], show: true })
-  }
+      .sort((a, b) => a.count < b.count);
+    this.setState({ winner: playerScores[0], show: true });
+  };
   render() {
-    const { winner } = this.state
+    const { winner, show } = this.state;
     if (!this.init && this.props.bricks.length >= BRICK_COLUMNS * BRICK_ROWS) {
       // ensures the entire gameboard has been loaded in the server before starting
-      this.init = true
-      this.initGrid()
+      this.init = true;
+      this.initGrid();
     }
     return (
       <div className="Paintr">
         <header className="headerContainer">
           <div className="header">
-            <h1>Paintr</h1>
+            <h1 className="gameTitle">Paintr</h1>
             <Timer
               start={this.state.startGameTimer}
               calcWinner={this.calcWinner}
+              winner={this.state.winner}
+              show={this.state.show}
             />
           </div>
         </header>
@@ -232,11 +232,8 @@ class Game extends Component {
             height={GAME_HEIGHT}
           />
         </div>
-        <Modal show={this.state.show} close={this.closeModal}>
-          <p style={{ background: winner.color }}>{winner.name}</p>
-        </Modal>
       </div>
-    )
+    );
   }
 }
 
@@ -245,5 +242,5 @@ export default withTracker(() => {
   return {
     bricks: GameBoard.find({}).fetch(),
     players: Players.find({}).fetch()
-  }
-})(Game)
+  };
+})(Game);

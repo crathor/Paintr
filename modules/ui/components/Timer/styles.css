@@ -1,5 +1,6 @@
 .timer {
   font-size: 50px;
+  font-family: "Bungee Inline", cursive;
 }
 .buttonContainer button {
   padding: 10px 15px;
@@ -18,4 +19,44 @@
 }
 .reset {
   background: red;
+}
+.gameTitle {
+  font-family: "Bungee Inline", cursive;
+  font-size: 50px;
+  letter-spacing: 7px;
+}
+.modalBody {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+.modalText {
+  text-align: center;
+  font-size: 48px;
+  font-family: "Press Start 2P", cursive;
+  padding: 7rem;
+  border: 10px solid black;
+}
+.winnerName {
+  margin-top: 20px;
+  font-size: 100px;
+  font-weight: bold;
+  letter-spacing: 5px;
+}
+.modalReset {
+  height: 100px;
+  width: 100%;
+  font-size: 24px;
+  font-family: "Press Start 2P", cursive;
+  border: 5px solid black;
+}
+
+.modalReset:hover {
+  transition: 0.3s ease-in-out;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  border: 5px solid white;
+  cursor: pointer;
 }

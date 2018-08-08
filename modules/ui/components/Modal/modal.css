@@ -5,11 +5,10 @@
   align-items: center;
   z-index: 500;
   width: 70%;
-  background-color: #21bab7;
-  border: 1px solid #fff;
+  /* border: 1px solid #fff; */
   box-shadow: 1px 1px 1px #000;
   left: 15%;
-  top: calc(50% - 50px);
+  top: calc(25% - 50px);
   box-sizing: border-box;
   transition: all 0.3s ease-out;
 }
