@@ -17,8 +17,6 @@ class Timer extends Component {
         color: ""
       }
     };
-    this.startTimer = this.startTimer.bind(this);
-    this.countDown = this.countDown.bind(this);
   }
 
   secondsToTime = secs => {
@@ -46,6 +44,8 @@ class Timer extends Component {
   startTimer = () => {
     this.interval = setInterval(this.countDown, 1000);
     this.setState({ pause: false });
+    if (this.state.seconds >= 60 || this.state.seconds === 0)
+      Meteor.call("reset.gameboard");
   };
 
   stopTimer = () => {
@@ -98,6 +98,7 @@ class Timer extends Component {
         <div className="buttonContainer">
           <button
             className="start"
+            disabled={this.props.disabled}
             onClick={this.state.pause ? this.startTimer : this.stopTimer}
           >
             {this.state.pause ? "Start" : "Pause"}

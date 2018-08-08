@@ -6,6 +6,12 @@
   align-items: center;
   flex-direction: column;
 }
+#game {
+  border: 2px solid #000;
+  border-right-width: 1px;
+  border-bottom-width: 1px;
+  box-shadow: 1px 1px 5px #000, -1px -1px 5px #000;
+}
 .gameSection {
   height: 100%;
   width: 100%;

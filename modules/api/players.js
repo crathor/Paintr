@@ -89,7 +89,6 @@ Meteor.methods({
     Players.insert({
       name,
       color: Konva.Util.getRandomColor(),
-      count: 0,
       size: 10,
       speed: 10,
       y: Math.floor(1 + Math.random() * GAME_HEIGHT),
