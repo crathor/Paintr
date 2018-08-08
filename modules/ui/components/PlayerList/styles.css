@@ -1,0 +1,7 @@
+.sideBar {
+  height: 100%;
+  width: 30%;
+  overflow: hidden;
+  background: '#000';
+  box-shadow: '1px 1px 3px #000';
+}

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Meteor } from 'meteor/meteor'
-import { BRICK_COLUMNS, BRICK_ROWS } from '../config'
+import './styles.css'
 
 class PlayerList extends Component {
   getCountPercentage(count, arrayLength) {
@@ -20,30 +20,35 @@ class PlayerList extends Component {
       })
       .sort((a, b) => a.count < b.count)
     return (
-      <ul>
-        {playerList
-          .map(player => {
-            return (
-              <li
-                key={player._id}
-                style={{
-                  background: player.color,
-                  color: '#fff'
-                }}
-              >
-                <h3>name: {player.name}</h3>
-                <p>speed: {player.speed}</p>
-                <p>size: {player.size}</p>
-                <p>
-                  Count: {this.getCountPercentage(player.count, bricks.length)}%
-                </p>
-                <button onClick={() => Meteor.call('boost.player', player)}>
-                  speed
-                </button>
-              </li>
-            )
-          })
-          .sort((a, b) => a.speed > b.speed)}
+      <ul className="sideBar">
+        {playerList.length === 0 ? (
+          <h1>No Players</h1>
+        ) : (
+          playerList
+            .map(player => {
+              return (
+                <li
+                  key={player._id}
+                  style={{
+                    background: player.color,
+                    color: '#fff'
+                  }}
+                >
+                  <h3>name: {player.name}</h3>
+                  <p>speed: {player.speed}</p>
+                  <p>size: {player.size}</p>
+                  <p>
+                    Count:{' '}
+                    {this.getCountPercentage(player.count, bricks.length)}%
+                  </p>
+                  <button onClick={() => Meteor.call('boost.player', player)}>
+                    speed
+                  </button>
+                </li>
+              )
+            })
+            .sort((a, b) => a.speed > b.speed)
+        )}
       </ul>
     )
   }

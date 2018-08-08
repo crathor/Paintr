@@ -49,30 +49,15 @@ const checkCollision = player => {
             Meteor.call('remove.boost', player)
             break
         }
-        GameBoard.update(
-          { index: brickIndex },
-          { $set: { powerup: false } },
-          { upsert: true }
-        )
+        GameBoard.update({ index: brickIndex }, { $set: { powerup: false } })
       }
     }
     if (brickIndex >= 0 && brickIndex < BRICK_COLUMNS * BRICK_ROWS) {
-      GameBoard.update(
-        { index: brickIndex },
-        { $set: { color: player.color } },
-        { upsert: true }
-      )
+      GameBoard.update({ index: brickIndex }, { $set: { color: player.color } })
     }
   }
 }
 Meteor.methods({
-  'reset.player.speed'(player) {
-    Players.update(
-      player._id,
-      { $set: { speed: 10, 'powerup.speed': false } },
-      { upsert: true }
-    )
-  },
   'reset.players'() {
     Players.remove({})
   },
@@ -84,7 +69,6 @@ Meteor.methods({
       { color: { $ne: player.color } },
       { $set: { speed: 0, frozen: true } },
       {
-        upsert: true,
         multi: true
       }
     )
@@ -94,7 +78,7 @@ Meteor.methods({
       Players.update(
         {},
         { $set: { speed: 10, frozen: false } },
-        { upsert: true, multi: true }
+        { multi: true }
       )
     }, 5000)
   },
@@ -116,40 +100,16 @@ Meteor.methods({
     })
   },
   'boost.player'(player) {
-    Players.update(
-      player._id,
-      { $set: { speed: 20, boost: true } },
-      { upsert: true }
-    )
+    Players.update(player._id, { $set: { speed: 20, boost: true } })
   },
   'remove.boost'(player) {
     Meteor.setTimeout(() => {
-      Players.update(
-        player._id,
-        { $set: { speed: 10, boost: false } },
-        { upsert: true }
-      )
+      Players.update(player._id, { $set: { speed: 10, boost: false } })
     }, 5000)
-  },
-  'reverse.player.direction'(player) {
-    if (player.powerup.reverse) return
-    Players.update(
-      player._id,
-      { $set: { 'powerup.reverse': true, speed: (player.speed *= -1) } },
-      { upsert: true }
-    )
-  },
-  'reset.player.reverse'(player) {
-    if (!player.powerup.reverse) return
-    Players.update(
-      player._id,
-      { $set: { 'powerup.reverse': false, speed: (player.speed *= -1) } },
-      { upsert: true }
-    )
   },
   'move.up'(player) {
     const p = getPlayer(player)
-    if (p.y <= 0 + BRICK_HEIGHT) return
+    if (p.y <= 0 + p.speed) return
     else {
       Players.update({ player }, { $set: { y: p.y - p.speed } })
       checkCollision(p)
@@ -157,7 +117,7 @@ Meteor.methods({
   },
   'move.down'(player) {
     const p = getPlayer(player)
-    if (p.y >= GAME_HEIGHT - BRICK_HEIGHT) return
+    if (p.y >= GAME_HEIGHT - p.speed) return
     else {
       Players.update({ player }, { $set: { y: p.y + p.speed } })
       checkCollision(p)
@@ -165,7 +125,7 @@ Meteor.methods({
   },
   'move.left'(player) {
     const p = getPlayer(player)
-    if (p.x <= 0 + BRICK_WIDTH) return
+    if (p.x <= 0 + p.speed) return
     else {
       Players.update({ player }, { $set: { x: p.x - p.speed } })
       checkCollision(p)
@@ -173,7 +133,7 @@ Meteor.methods({
   },
   'move.right'(player) {
     const p = getPlayer(player)
-    if (p.x >= GAME_WIDTH - BRICK_WIDTH) return
+    if (p.x >= GAME_WIDTH - p.speed) return
     else {
       Players.update({ player }, { $set: { x: p.x + p.speed } })
       checkCollision(p)
