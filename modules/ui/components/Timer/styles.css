@@ -1,0 +1,21 @@
+.timer {
+  font-size: 50px;
+}
+.buttonContainer button {
+  padding: 10px 15px;
+  margin: 5px;
+  color: #fff;
+  font-size: 20px;
+  border: none;
+  box-shadow: 1px 1px 3px #000;
+  outline: none;
+}
+.buttonContainer button:active {
+  transform: translate(0, 3px);
+}
+.start {
+  background: green;
+}
+.reset {
+  background: red;
+}

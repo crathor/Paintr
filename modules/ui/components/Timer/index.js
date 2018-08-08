@@ -1,95 +1,90 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from 'react'
+import './styles.css'
 
 class Timer extends Component {
   // seen on https://stackoverflow.com/questions/40885923/countdown-timer-in-react
   constructor() {
-    super();
-    this.state = { time: {}, seconds: 5 };
-    this.timer = 0;
-    this.startTimer = this.startTimer.bind(this);
-    this.countDown = this.countDown.bind(this);
+    super()
+    this.state = { timer: 0, time: {}, seconds: 120, pause: true }
+    this.startTimer = this.startTimer.bind(this)
+    this.countDown = this.countDown.bind(this)
   }
 
-  secondsToTime(secs) {
-    let hours = Math.floor(secs / (60 * 60));
+  secondsToTime = secs => {
+    const hours = Math.floor(secs / (60 * 60))
 
-    let divisor_for_minutes = secs % (60 * 60);
-    let minutes = Math.floor(divisor_for_minutes / 60);
+    const divisor_for_minutes = secs % (60 * 60)
+    const minutes = Math.floor(divisor_for_minutes / 60)
 
-    let divisor_for_seconds = divisor_for_minutes % 60;
-    let seconds = Math.ceil(divisor_for_seconds);
+    const divisor_for_seconds = divisor_for_minutes % 60
+    const seconds = Math.ceil(divisor_for_seconds)
 
-    let obj = {
+    const timer = {
       h: hours,
       m: minutes,
       s: seconds
-    };
-    return obj;
+    }
+    return timer
   }
 
   componentDidMount() {
-    let timeLeftVar = this.secondsToTime(this.state.seconds);
-    this.setState({ time: timeLeftVar });
-
-    window.onkeydown = e => {
-      switch (e.key) {
-        case "q":
-          console.log("pressed the q");
-          break;
-        case RESET_KEY:
-          Meteor.call("reset.timer");
-          Meteor.call("get.time", (err, res) => {
-            console.log(res);
-          });
-          break;
-        default:
-          break;
-      }
-    };
+    let timeLeftVar = this.secondsToTime(this.state.seconds)
+    this.setState({ time: timeLeftVar })
   }
 
-  startTimer() {
-    if (this.timer == 0) {
-      this.timer = setInterval(this.countDown, 1000);
-    }
+  startTimer = () => {
+    this.interval = setInterval(this.countDown, 1000)
+    this.setState({ pause: false })
   }
-  // resetTimer() {
-  //   this.state = { time: {}, seconds: 120 };
-  // }
-  // componentDidUpdate(prevProps) {
-  //   if (prevProps.resetTimer !== this.props.resetTimer) {
-  //     this.resetTimer();
-  //     this.props.timerReset();
-  //   }
-  // }
 
-  countDown() {
+  stopTimer = () => {
+    clearInterval(this.interval)
+    this.setState({ pause: true })
+  }
+
+  reset = () => {
+    this.setState({
+      timer: 0,
+      paused: true,
+      time: this.secondsToTime(this.state.seconds),
+      seconds: 120
+    })
+  }
+  countDown = () => {
     // Remove one second, set state so a re-render happens.
-    let seconds = this.state.seconds - 1;
+    let seconds = this.state.seconds - 1
     this.setState({
       time: this.secondsToTime(seconds),
       seconds: seconds
-    });
+    })
 
     // Check if we're at zero.
     if (seconds === 0) {
-      clearInterval(this.timer);
-      this.props.calcWinner();
+      clearInterval(this.timer)
+      this.props.calcWinner()
     }
   }
 
   render() {
+    const { time } = this.state
     return (
-      <div>
-        <button
-          style={{ display: "none" }}
-          onClick={this.props.start ? this.startTimer() : null}
-        >
-          Start
-        </button>
-        m: {this.state.time.m} s: {this.state.time.s}
-      </div>
-    );
+      <Fragment>
+        <p className="timer">
+          {time.m} : {time.s < 10 ? `0${time.s}` : time.s}
+        </p>
+        <div className="buttonContainer">
+          <button
+            className="start"
+            onClick={this.state.pause ? this.startTimer : this.stopTimer}
+          >
+            {this.state.pause ? 'Start' : 'Pause'}
+          </button>
+          <button className="reset" onClick={this.reset}>
+            Reset
+          </button>
+        </div>
+      </Fragment>
+    )
   }
 }
-export default Timer;
+export default Timer

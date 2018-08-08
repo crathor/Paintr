@@ -131,25 +131,9 @@ Meteor.methods({
       )
     }, 5000)
   },
-  'reverse.player.direction'(player) {
-    if (player.powerup.reverse) return
-    Players.update(
-      player._id,
-      { $set: { 'powerup.reverse': true, speed: (player.speed *= -1) } },
-      { upsert: true }
-    )
-  },
-  'reset.player.reverse'(player) {
-    if (!player.powerup.reverse) return
-    Players.update(
-      player._id,
-      { $set: { 'powerup.reverse': false, speed: (player.speed *= -1) } },
-      { upsert: true }
-    )
-  },
   'move.up'(player) {
     const p = getPlayer(player)
-    if (p.y <= 0 + BRICK_HEIGHT) return
+    if (p.y <= 0 + 10) return
     else {
       Players.update({ player }, { $set: { y: p.y - p.speed } })
       checkCollision(p)
@@ -157,7 +141,7 @@ Meteor.methods({
   },
   'move.down'(player) {
     const p = getPlayer(player)
-    if (p.y >= GAME_HEIGHT - BRICK_HEIGHT) return
+    if (p.y >= GAME_HEIGHT - 12) return
     else {
       Players.update({ player }, { $set: { y: p.y + p.speed } })
       checkCollision(p)
@@ -165,7 +149,7 @@ Meteor.methods({
   },
   'move.left'(player) {
     const p = getPlayer(player)
-    if (p.x <= 0 + BRICK_WIDTH) return
+    if (p.x <= 0 + 10) return
     else {
       Players.update({ player }, { $set: { x: p.x - p.speed } })
       checkCollision(p)
@@ -173,7 +157,7 @@ Meteor.methods({
   },
   'move.right'(player) {
     const p = getPlayer(player)
-    if (p.x >= GAME_WIDTH - BRICK_WIDTH) return
+    if (p.x >= GAME_WIDTH - 12) return
     else {
       Players.update({ player }, { $set: { x: p.x + p.speed } })
       checkCollision(p)

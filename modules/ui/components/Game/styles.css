@@ -1,5 +1,33 @@
-.controllerZone {
+.Paintr {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+.gameSection {
   height: 100%;
-  width: 50%;
-  background: coral;
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+}
+.sideBar:hover {
+  overflow: auto;
+}
+.canvas {
+  align-self: center;
+  margin: 0 auto;
+}
+.headerContainer {
+  background: '#000';
+  width: 100vw;
+  color: '#fff';
+  display: flex;
+  justify-content: center;
+}
+.header {
+  height: 70px;
+  padding: 10px;
+  width: 80%;
+  display: flex;
+  justify-content: space-between;
 }
