@@ -1,59 +1,67 @@
-import React, { Component } from "react";
-import ReactNipple from "react-nipple";
-import DebugView from "react-nipple/lib/DebugView";
-import "react-nipple/lib/styles.css";
+import React, { Component } from 'react'
+import ReactNipple from 'react-nipple'
+import DebugView from 'react-nipple/lib/DebugView'
+import 'react-nipple/lib/styles.css'
+import { Meteor } from 'meteor/meteor'
 class Joystick extends Component {
-  state = { data: {} };
+  constructor(props) {
+    super(props)
+  }
+
   componentDidMount() {}
   handleEvent = (evt, data) => {
-    this.setState({ data });
-    // console.log(data.direction.x == "left");
-    // switch (data.direction) {
-    //   case data.direction.x == "left":
-    //     console.log("move left");
-    //     break;
-    // }
-    if (data.direction.x === "left") {
-      console.log("move left");
-    } else if (data.direction.x === "right") {
-      console.log("move right");
-    }
+    console.log(evt.type, data.angle)
+    const { degree } = data.angle
+    switch (evt.type) {
+      case 'move':
+        if (degree > 337.5 || degree < 22.5)
+          Meteor.call('move.right', Meteor.userId())
+        else if (degree > 22.5 && degree < 67.5) {
+          Meteor.call('move.right', Meteor.userId())
+          Meteor.call('move.up', Meteor.userId())
+        } else if (degree > 67.5 && degree < 112.5) {
+          Meteor.call('move.up', Meteor.userId())
+        } else if (degree > 112.5 && degree < 157.5) {
+          Meteor.call('move.left', Meteor.userId())
+          Meteor.call('move.up', Meteor.userId())
+        } else if (degree > 157.5 && degree < 202.5) {
+          Meteor.call('move.left', Meteor.userId())
+        } else if (degree > 202.5 && degree < 247.5) {
+          Meteor.call('move.left', Meteor.userId())
+          Meteor.call('move.down', Meteor.userId())
+        } else if (degree > 247.5 && degree < 292.5) {
+          Meteor.call('move.down', Meteor.userId())
+        } else if (degree > 292.5 && degree < 337.5) {
+          Meteor.call('move.right', Meteor.userId())
+          Meteor.call('move.down', Meteor.userId())
+        }
+        break
 
-    if (data.direction.y === "up") {
-      console.log("move up");
-    } else if (data.direction.y === "down") {
-      console.log("move down");
+      default:
+        break
     }
-  };
+  }
 
   render() {
     return (
       <div>
         <ReactNipple
           options={{
-            mode: "static",
-            position: { top: "50%", left: "50%" },
-            color: "black"
+            mode: 'static',
+            position: { top: '50%', left: '50%' },
+            color: 'black'
           }}
           style={{
-            outline: "1px dashed red",
+            outline: '1px dashed red',
             width: 300,
             height: 300,
-            position: "relative"
+            position: 'relative'
           }}
-          onStart={this.handleEvent}
-          onEnd={this.handleEvent}
           onMove={this.handleEvent}
-          onDir={this.handleEvent}
-          onPlain={this.handleEvent}
-          onShown={this.handleEvent}
-          onHidden={this.handleEvent}
-          onPressure={this.handleEvent}
         />
-        <DebugView data={this.state.data} />
       </div>
-    );
+    )
   }
 }
 
-export default Joystick;
+export default Joystick

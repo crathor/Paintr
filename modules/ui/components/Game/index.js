@@ -3,7 +3,6 @@ import { withTracker } from 'meteor/react-meteor-data'
 import PlayerList from '../../components/PlayerList'
 import { Players } from '../../../api/players'
 import { GameBoard } from '../../../api/gameboard'
-import { Time } from '../../../api/timer'
 import './styles.css'
 import Timer from '../../components/Timer'
 import { Meteor } from 'meteor/meteor'
@@ -96,6 +95,34 @@ class Game extends Component {
     //   'yellow'
     // )'
   }
+  drawStar(cx, cy, spikes, outerRadius, innerRadius) {
+    var rot = (Math.PI / 2) * 3
+    var x = cx
+    var y = cy
+    var step = Math.PI / spikes
+
+    this.ctx.beginPath()
+    this.ctx.moveTo(cx, cy - outerRadius)
+    for (let i = 0; i < spikes; i++) {
+      x = cx + Math.cos(rot) * outerRadius
+      y = cy + Math.sin(rot) * outerRadius
+      this.ctx.lineTo(x, y)
+      rot += step
+
+      x = cx + Math.cos(rot) * innerRadius
+      y = cy + Math.sin(rot) * innerRadius
+      this.ctx.lineTo(x, y)
+      rot += step
+    }
+    this.ctx.lineTo(cx, cy - outerRadius)
+    this.ctx.closePath()
+    this.ctx.lineWidth = 3
+    this.ctx.strokeStyle = 'black'
+    this.ctx.stroke()
+    this.ctx.fillStyle = '#d8c308'
+    this.ctx.fill()
+  }
+
   colorRect(topLeftX, topLeftY, boxWidth, boxHeight, fillColor, text) {
     this.ctx.fillStyle = fillColor
     this.ctx.fillRect(topLeftX, topLeftY, boxWidth, boxHeight)
@@ -166,11 +193,18 @@ class Game extends Component {
           )
           if (TILES[arrayIndex].powerup) {
             // draws a powerup circle thats green
-            this.colorCircle(
+            // this.colorCircle(
+            //   BRICK_WIDTH * eachCol + BRICK_HEIGHT / 2,
+            //   BRICK_HEIGHT * eachRow + BRICK_WIDTH / 2,
+            //   10,
+            //   '#ff00d0'
+            // )
+            this.drawStar(
               BRICK_WIDTH * eachCol + BRICK_HEIGHT / 2,
               BRICK_HEIGHT * eachRow + BRICK_WIDTH / 2,
+              5,
               10,
-              'green'
+              5
             )
           }
         }
