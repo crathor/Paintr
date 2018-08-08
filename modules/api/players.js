@@ -61,6 +61,9 @@ Meteor.methods({
   'reset.players'() {
     Players.remove({})
   },
+  'reset.player.speed'() {
+    Players.update({}, { $set: { speed: 10 } }, { multi: true })
+  },
   'get.player'(id) {
     return getPlayer(id)
   },
