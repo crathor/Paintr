@@ -231,29 +231,31 @@ class Game extends Component {
       this.initGrid()
     }
     return (
-      <div className="Paintr">
-        <header className="headerContainer">
-          <div className="header">
-            <h1 className="gameTitle">Paintr</h1>
-            <Timer
-              start={this.state.startGameTimer}
-              calcWinner={this.calcWinner}
-              winner={this.state.winner}
-              show={this.state.show}
+      <div className="rainbowBackground">
+        <div className="Paintr">
+          <header className="headerContainer">
+            <div className="header">
+              <h1 className="gameTitle">Paintr</h1>
+              <Timer
+                start={this.state.startGameTimer}
+                calcWinner={this.calcWinner}
+                winner={this.state.winner}
+                show={this.state.show}
+              />
+            </div>
+          </header>
+          <div className="gameSection">
+            <PlayerList
+              players={this.props.players || []}
+              bricks={this.props.bricks || []}
+            />
+            <canvas
+              className="canvas"
+              id="game"
+              width={GAME_WIDTH}
+              height={GAME_HEIGHT}
             />
           </div>
-        </header>
-        <div className="gameSection">
-          <PlayerList
-            players={this.props.players || []}
-            bricks={this.props.bricks || []}
-          />
-          <canvas
-            className="canvas"
-            id="game"
-            width={GAME_WIDTH}
-            height={GAME_HEIGHT}
-          />
         </div>
       </div>
     )
