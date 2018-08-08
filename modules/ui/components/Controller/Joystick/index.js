@@ -43,7 +43,8 @@ class Joystick extends Component {
           options={{
             mode: "static",
             position: { top: "50%", left: "50%" },
-            color: "black"
+            color: "black",
+            size: 350
           }}
           style={{
             outline: "1px dashed red",
