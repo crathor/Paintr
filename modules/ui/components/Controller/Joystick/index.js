@@ -1,14 +1,8 @@
 import React, { Component } from 'react'
 import ReactNipple from 'react-nipple'
-import DebugView from 'react-nipple/lib/DebugView'
 import 'react-nipple/lib/styles.css'
 import { Meteor } from 'meteor/meteor'
 class Joystick extends Component {
-  constructor(props) {
-    super(props)
-  }
-
-  componentDidMount() {}
   handleEvent = (evt, data) => {
     console.log(evt.type, data.angle)
     const { degree } = data.angle
@@ -44,22 +38,20 @@ class Joystick extends Component {
 
   render() {
     return (
-      <div>
-        <ReactNipple
-          options={{
-            mode: 'static',
-            position: { top: '50%', left: '50%' },
-            color: 'black'
-          }}
-          style={{
-            outline: '1px dashed red',
-            width: 300,
-            height: 300,
-            position: 'relative'
-          }}
-          onMove={this.handleEvent}
-        />
-      </div>
+      <ReactNipple
+        options={{
+          mode: 'static',
+          position: { top: '50%', left: '50%' },
+          color: 'black'
+        }}
+        style={{
+          outline: '1px dashed red',
+          width: 300,
+          height: 300,
+          position: 'relative'
+        }}
+        onMove={this.handleEvent}
+      />
     )
   }
 }

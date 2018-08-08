@@ -1,12 +1,13 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import Joystick from './Joystick'
 import { Meteor } from 'meteor/meteor'
+import { withTracker } from 'meteor/react-meteor-data'
+import { Players } from '../../../api/players'
 
 class Controller extends Component {
   state = {
     playerCreated: false,
-    name: '',
-    player: {}
+    name: ''
   }
   handleChange = event => {
     if (event.target.value.length > 8) return
@@ -22,18 +23,22 @@ class Controller extends Component {
       },
       async () => {
         await Meteor.call('add.player', this.state.name)
-        Meteor.call('get.player', Meteor.userId(), (err, res) => {
-          this.setState({ player: res })
-        })
       }
     )
   }
   render() {
-    const { playerCreated, player } = this.state
+    const { player } = this.props
+    console.log(player)
+    const { playerCreated } = this.state
     return (
-      <div>
+      <div style={{ width: '100vw', height: '100vh' }}>
         {playerCreated ? (
-          <Joystick player={player} />
+          <Fragment>
+            <h1>{player.name}</h1>
+            <p>{player.boost && 'Boost!'}</p>
+            <p>{player.frozen && 'Frozen!'}</p>
+            <Joystick />
+          </Fragment>
         ) : (
           <div>
             <form onSubmit={this.handleSubmit}>
@@ -53,4 +58,9 @@ class Controller extends Component {
     )
   }
 }
-export default Controller
+export default withTracker(() => {
+  Meteor.subscribe('player')
+  return {
+    player: Players.find({}).fetch()
+  }
+})(Controller)
