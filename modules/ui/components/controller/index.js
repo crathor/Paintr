@@ -3,6 +3,7 @@ import Joystick from './Joystick'
 import { Meteor } from 'meteor/meteor'
 import { withTracker } from 'meteor/react-meteor-data'
 import { Players } from '../../../api/players'
+import './styles.css'
 
 class Controller extends Component {
   state = {
@@ -40,17 +41,18 @@ class Controller extends Component {
             <Joystick />
           </Fragment>
         ) : (
-          <div>
-            <form onSubmit={this.handleSubmit}>
-              <label>
-                Name:
-                <input
-                  type="text"
-                  value={this.state.name}
-                  onChange={this.handleChange}
-                />
-              </label>
-              <input type="submit" value="Submit" />
+          <div className="rainbowBackground formBackground">
+            <h1 className="gameTitle">paintr</h1>
+            <form className="formContainer" onSubmit={this.handleSubmit}>
+              <input
+                className="nameInput"
+                placeholder="Enter Name"
+                type="text"
+                value={this.state.name}
+                onChange={this.handleChange}
+              />
+              <input className="nameSubmit" type="submit" value="Submit" />
+              {/* <button className="nameSubmit" type="submit" value="Submit" /> */}
             </form>
           </div>
         )}
