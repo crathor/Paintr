@@ -1,57 +1,56 @@
-import React, { Component } from 'react'
-import { Meteor } from 'meteor/meteor'
-import './styles.css'
+import React, { Component } from "react";
+import { Meteor } from "meteor/meteor";
+import "./styles.css";
 
 class PlayerList extends Component {
   getCountPercentage(count, arrayLength) {
-    const percentage = (count * 100) / arrayLength
-    return percentage.toFixed(1)
+    const percentage = (count * 100) / arrayLength;
+    return percentage.toFixed(1);
   }
   render() {
-    const { players, bricks } = this.props
-    const brickColors = bricks.map(brick => brick.color)
+    const { players, bricks } = this.props;
+    const brickColors = bricks.map(brick => brick.color);
     const playerList = players
       .map(player => {
-        const count = brickColors.filter(color => color === player.color).length
+        const count = brickColors.filter(color => color === player.color)
+          .length;
         return {
           ...player,
           count
-        }
+        };
       })
-      .sort((a, b) => a.count < b.count)
+      .sort((a, b) => a.count < b.count);
     return (
       <ul className="sideBar">
         {playerList.length === 0 ? (
-          <h1>No Players</h1>
+          <h1 className="noPlayers">No Players</h1>
         ) : (
           playerList
             .map(player => {
               return (
                 <li
                   key={player._id}
-                  style={{
-                    background: player.color,
-                    color: '#fff'
-                  }}
+                  style={{ background: player.color, color: "#fff" }}
+                  className="playerCard"
                 >
-                  <h3>name: {player.name}</h3>
-                  <p>speed: {player.speed}</p>
-                  <p>size: {player.size}</p>
-                  <p>
-                    Count:{' '}
-                    {this.getCountPercentage(player.count, bricks.length)}%
-                  </p>
-                  <button onClick={() => Meteor.call('boost.player', player)}>
-                    speed
-                  </button>
+                  <div>
+                    <h3 className="playerName">{player.name}</h3>
+                    <p className="boost">{player.boost && "BOOST!!"}</p>
+                    <p className="frozen">{player.frozen && "FROZEN!"}</p>
+                  </div>
+                  <div>
+                    <p className="playerPercent">
+                      {this.getCountPercentage(player.count, bricks.length)}%
+                    </p>
+                  </div>
                 </li>
-              )
+              );
             })
             .sort((a, b) => a.speed > b.speed)
         )}
       </ul>
-    )
+    );
   }
 }
 
-export default PlayerList
+export default PlayerList;

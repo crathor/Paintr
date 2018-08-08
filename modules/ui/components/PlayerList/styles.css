@@ -2,6 +2,33 @@
   height: 100%;
   width: 30%;
   overflow: hidden;
-  background: '#000';
-  box-shadow: '1px 1px 3px #000';
+  background: "#000";
+  box-shadow: "1px 1px 3px #000";
+}
+.sideBar:hover {
+  overflow-y: scroll;
+}
+.noPlayers {
+  font-family: "Press Start 2P", cursive;
+  margin-left: 2rem;
+  margin-top: 2rem;
+}
+.playerCard {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  border: 2px solid black;
+  font-family: "Press Start 2P", cursive;
+}
+.playerPercent {
+  font-size: 46px;
+}
+.boost {
+  background: white;
+  color: red;
+}
+.frozen {
+  background: white;
+  color: blue;
 }

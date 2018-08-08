@@ -114,7 +114,7 @@ class Timer extends Component {
         >
           <div className="modalBody">
             <p className="modalText" style={{ background: winner.color }}>
-              Winner: <span className="winnerName">{winner.name}</span>
+              - Winner - <span className="winnerName">{winner.name}</span>
             </p>
             <button className="modalReset" onClick={this.reset}>
               Play Again

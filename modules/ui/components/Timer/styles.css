@@ -16,9 +16,21 @@
 }
 .start {
   background: green;
+  font-family: "Press Start 2P", cursive;
+  box-shadow: 10px 10px black;
+}
+.start:hover {
+  cursor: pointer;
+  box-shadow: none;
 }
 .reset {
   background: red;
+  font-family: "Press Start 2P", cursive;
+  box-shadow: 10px 10px black;
+}
+.reset:hover {
+  cursor: pointer;
+  box-shadow: none;
 }
 .gameTitle {
   font-family: "Bungee Inline", cursive;
