@@ -1,3 +1,30 @@
-.controller {
-  background: orange;
+.formBackground {
+  height: 100vh;
+  width: 100vw;
+  font-family: "Press Start 2P", cursive;
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+}
+
+.formContainer {
+  margin-top: 3rem;
+}
+
+.nameInput {
+  padding: 1rem;
+  border-radius: 20px;
+  font-size: 36px;
+  width: 200px;
+}
+
+.nameSubmit {
+  height: 150px;
+  width: 150px;
+  display: block;
+  margin-top: 2rem;
+  margin-left: auto;
+  margin-right: auto;
 }
