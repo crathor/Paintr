@@ -23,6 +23,7 @@
   color: '#fff';
   display: flex;
   justify-content: center;
+  background-color: aqua;
 }
 .header {
   height: 70px;

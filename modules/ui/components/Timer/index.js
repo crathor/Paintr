@@ -5,7 +5,7 @@ class Timer extends Component {
   // seen on https://stackoverflow.com/questions/40885923/countdown-timer-in-react
   constructor() {
     super()
-    this.state = { timer: 0, time: {}, seconds: 120, pause: true }
+    this.state = { timer: 0, time: {}, seconds: 60, pause: true }
     this.startTimer = this.startTimer.bind(this)
     this.countDown = this.countDown.bind(this)
   }
@@ -43,6 +43,7 @@ class Timer extends Component {
   }
 
   reset = () => {
+    clearInterval(this.interval)
     this.setState({
       timer: 0,
       paused: true,
@@ -60,7 +61,7 @@ class Timer extends Component {
 
     // Check if we're at zero.
     if (seconds === 0) {
-      clearInterval(this.timer)
+      this.reset()
       this.props.calcWinner()
     }
   }

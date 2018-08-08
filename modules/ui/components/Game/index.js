@@ -47,7 +47,7 @@ class Game extends Component {
     this.mouseY = 0
     this.canvas = document.getElementById('game')
     this.ctx = this.canvas.getContext('2d')
-    this.framesPerSecond = 30
+    this.framesPerSecond = 60
     this.init = false
     this.canvas.addEventListener(
       'mousemove',

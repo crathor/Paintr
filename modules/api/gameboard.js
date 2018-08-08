@@ -20,17 +20,9 @@ Meteor.setInterval(() => {
 
 Meteor.methods({
   'reset.gameboard'() {
-    GameBoard.update(
-      {},
-      { $set: { color: '#f4f4f4' } },
-      { upsert: true, multi: true }
-    )
+    GameBoard.update({}, { $set: { color: '#f4f4f4' } }, { multi: true })
   },
   'set.gameboard.color'(player) {
-    GameBoard.update(
-      {},
-      { $set: { color: player.color } },
-      { upsert: true, multi: true }
-    )
+    GameBoard.update({}, { $set: { color: player.color } }, { multi: true })
   }
 })
