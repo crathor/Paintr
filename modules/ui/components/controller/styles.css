@@ -14,17 +14,27 @@
 }
 
 .nameInput {
-  padding: 1rem;
+  padding: 2rem;
   border-radius: 20px;
   font-size: 36px;
-  width: 200px;
+  width: 35vw;
+  text-align: center;
 }
 
 .nameSubmit {
   height: 150px;
-  width: 150px;
+  width: 25vw;
+  font-size: 40px;
   display: block;
-  margin-top: 2rem;
+  font-family: monospace;
+  margin-top: 10rem;
   margin-left: auto;
   margin-right: auto;
+}
+
+.mobileTitle {
+  font-family: "Bungee Inline", cursive;
+  font-size: 150px;
+  letter-spacing: 7px;
+  margin-bottom: 10rem;
 }
