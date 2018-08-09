@@ -1,7 +1,0 @@
-{
-    "galaxy.meteor.com": {
-    "env": {
-        "MONGO_URL": "mongodb://paintr123:test123@ds217452.mlab.com:17452/paintr"
-    }
-}
-}
