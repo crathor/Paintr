@@ -30,6 +30,7 @@ class Controller extends Component {
   render() {
     const { player } = this.props;
     const { playerCreated } = this.state;
+    console.log(player);
     return (
       <div style={{ width: "100vw", height: "100vh" }}>
         {playerCreated ? (
@@ -62,6 +63,8 @@ class Controller extends Component {
 export default withTracker(() => {
   Meteor.subscribe("player");
   return {
-    player: Players.find({}).fetch()
+    player: Players.find({})
+      .fetch()
+      .filter(curr => curr.player === Meteor.userId())
   };
 })(Controller);
