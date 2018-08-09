@@ -2,6 +2,7 @@ import { Mongo } from 'meteor/mongo'
 import { Meteor } from 'meteor/meteor'
 import { GameBoard } from './gameboard'
 import Konva from 'konva'
+import SimpleSchema from 'simpl-schema'
 import {
   GAME_WIDTH,
   GAME_HEIGHT,
@@ -11,10 +12,27 @@ import {
   BRICK_ROWS,
   PLAYER_SPEED,
   PLAYER_BOOST,
+  PLAYER_SIZE,
   rowColToArrayIndex
 } from '../ui/components/config'
 
 export const Players = new Mongo.Collection('players')
+
+Players.schema = new SimpleSchema({
+  _id: {
+    type: String,
+    optional: true
+  },
+  name: String,
+  color: String,
+  size: Number,
+  speed: Number,
+  y: Number,
+  x: Number,
+  boost: Boolean,
+  frozen: Boolean,
+  player: String
+})
 
 if (Meteor.isServer) {
   Meteor.publish('players', () => {
@@ -54,7 +72,6 @@ const checkCollision = player => {
 
           default:
             Meteor.call('boost.player', player)
-            Meteor.call('remove.boost', player)
             break
         }
         GameBoard.update({ index: brickIndex }, { $set: { powerup: false } })
@@ -65,6 +82,16 @@ const checkCollision = player => {
     }
   }
 }
+const removeBoost = player => {
+  Meteor.setTimeout(() => {
+    Meteor.call('remove.boost', player)
+  }, 5000)
+}
+const unFreezePlayers = () => {
+  Meteor.setTimeout(() => {
+    Meteor.call('unfreeze.players')
+  }, 5000)
+}
 Meteor.methods({
   'reset.players'() {
     Players.remove({})
@@ -72,10 +99,8 @@ Meteor.methods({
   'reset.player.speed'() {
     Players.update({}, { $set: { speed: PLAYER_SPEED } }, { multi: true })
   },
-  'get.player'(id) {
-    return getPlayer(id)
-  },
   'freeze.players'(player) {
+    Players.schema.validate(player)
     Players.update(
       { color: { $ne: player.color } },
       { $set: { speed: 0, frozen: true } },
@@ -83,44 +108,47 @@ Meteor.methods({
         multi: true
       }
     )
+    unFreezePlayers()
   },
   'unfreeze.players'() {
-    Meteor.setTimeout(() => {
-      Players.update(
-        {},
-        { $set: { speed: 10, frozen: false } },
-        { multi: true }
-      )
-    }, 5000)
+    Players.update(
+      {},
+      { $set: { speed: PLAYER_SPEED, frozen: false } },
+      { multi: true }
+    )
   },
   'remove.player'(player) {
     Players.remove({ player })
   },
   'add.player'(name) {
-    Players.insert({
+    const newPlayer = {
       name,
       color: Konva.Util.getRandomColor(),
-      size: 10,
+      size: PLAYER_SIZE,
       speed: PLAYER_SPEED,
       y: Math.floor(1 + Math.random() * GAME_HEIGHT),
       x: Math.floor(1 + Math.random() * GAME_WIDTH),
       boost: false,
       frozen: false,
       player: Meteor.userId()
-    })
+    }
+    Players.schema.validate(newPlayer)
+    Players.insert(newPlayer)
   },
   'boost.player'(player) {
+    Players.schema.validate(player)
     Players.update(player._id, { $set: { speed: PLAYER_BOOST, boost: true } })
+    removeBoost(player)
   },
   'remove.boost'(player) {
-    Meteor.setTimeout(() => {
-      Players.update(player._id, {
-        $set: { speed: PLAYER_SPEED, boost: false }
-      })
-    }, 5000)
+    Players.schema.validate(player)
+    Players.update(player._id, {
+      $set: { speed: PLAYER_SPEED, boost: false }
+    })
   },
   'move.up'(player) {
     const p = getPlayer(player)
+    Players.schema.validate(p)
     if (p.y <= 0 + p.speed) return
     else {
       Players.update({ player }, { $set: { y: p.y - p.speed } })
@@ -129,6 +157,7 @@ Meteor.methods({
   },
   'move.down'(player) {
     const p = getPlayer(player)
+    Players.schema.validate(p)
     if (p.y >= GAME_HEIGHT - p.speed) return
     else {
       Players.update({ player }, { $set: { y: p.y + p.speed } })
@@ -137,6 +166,7 @@ Meteor.methods({
   },
   'move.left'(player) {
     const p = getPlayer(player)
+    Players.schema.validate(p)
     if (p.x <= 0 + p.speed) return
     else {
       Players.update({ player }, { $set: { x: p.x - p.speed } })
@@ -145,6 +175,7 @@ Meteor.methods({
   },
   'move.right'(player) {
     const p = getPlayer(player)
+    Players.schema.validate(p)
     if (p.x >= GAME_WIDTH - p.speed) return
     else {
       Players.update({ player }, { $set: { x: p.x + p.speed } })

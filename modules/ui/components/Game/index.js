@@ -201,8 +201,8 @@ class Game extends Component {
               BRICK_WIDTH * eachCol + BRICK_HEIGHT / 2,
               BRICK_HEIGHT * eachRow + BRICK_WIDTH / 2,
               5,
-              10,
-              5
+              15,
+              10
             )
           }
         }
