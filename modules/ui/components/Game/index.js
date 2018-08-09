@@ -76,7 +76,7 @@ class Game extends Component {
     this.mouseX = e.clientX - rect.left - root.scrollLeft
     this.mouseY = e.clientY - rect.top - root.scrollTop
   }
-  updateAll() {
+  updateAll = () => {
     this.move()
     this.drawAll()
   }
@@ -151,16 +151,16 @@ class Game extends Component {
   rowColToArrayIndex(col, row) {
     return col + BRICK_COLUMNS * row
   }
-  initGrid = () => {
+  initGrid = async () => {
     const TILES = this.props.bricks
     if (TILES.length > 0) {
       for (let eachRow = 0; eachRow < BRICK_ROWS; eachRow++) {
         for (let eachCol = 0; eachCol < BRICK_COLUMNS; eachCol++) {
           const arrayIndex = this.rowColToArrayIndex(eachCol, eachRow)
-          GameBoard.update(
-            { _id: this.props.bricks[arrayIndex]._id },
-            { $set: { index: arrayIndex, powerup: false } },
-            { upsert: true }
+          await Meteor.call(
+            'init.gameboard',
+            this.props.bricks[arrayIndex]._id,
+            arrayIndex
           )
           this.colorRect(
             BRICK_WIDTH * eachCol,

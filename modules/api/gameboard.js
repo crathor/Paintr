@@ -17,11 +17,21 @@ Meteor.setInterval(() => {
     const brick = GameBoard.findOne({
       index: Math.floor(Math.random() * (BRICK_COLUMNS * BRICK_ROWS))
     })
-    GameBoard.update(brick._id, { $set: { powerup: true } })
+    Meteor.call('update.brick', brick._id)
   }
 }, 3000)
 
 Meteor.methods({
+  'update.brick'(_id) {
+    GameBoard.update(_id, { $set: { powerup: true } })
+  },
+  'init.gameboard'(_id, index) {
+    GameBoard.update(
+      { _id },
+      { $set: { index, powerup: false } },
+      { upsert: true }
+    )
+  },
   'reset.gameboard'() {
     GameBoard.update({}, { $set: { color: '#f4f4f4' } }, { multi: true })
   },

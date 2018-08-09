@@ -29,7 +29,6 @@ class Controller extends Component {
   }
   render() {
     const { player } = this.props
-    console.log(player)
     const { playerCreated } = this.state
     return (
       <div style={{ width: '100vw', height: '100vh' }}>

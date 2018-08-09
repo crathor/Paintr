@@ -9,6 +9,8 @@ import {
   BRICK_HEIGHT,
   BRICK_WIDTH,
   BRICK_ROWS,
+  PLAYER_SPEED,
+  PLAYER_BOOST,
   rowColToArrayIndex
 } from '../ui/components/config'
 
@@ -68,7 +70,7 @@ Meteor.methods({
     Players.remove({})
   },
   'reset.player.speed'() {
-    Players.update({}, { $set: { speed: 10 } }, { multi: true })
+    Players.update({}, { $set: { speed: PLAYER_SPEED } }, { multi: true })
   },
   'get.player'(id) {
     return getPlayer(id)
@@ -99,7 +101,7 @@ Meteor.methods({
       name,
       color: Konva.Util.getRandomColor(),
       size: 10,
-      speed: 10,
+      speed: PLAYER_SPEED,
       y: Math.floor(1 + Math.random() * GAME_HEIGHT),
       x: Math.floor(1 + Math.random() * GAME_WIDTH),
       boost: false,
@@ -108,11 +110,13 @@ Meteor.methods({
     })
   },
   'boost.player'(player) {
-    Players.update(player._id, { $set: { speed: 20, boost: true } })
+    Players.update(player._id, { $set: { speed: PLAYER_BOOST, boost: true } })
   },
   'remove.boost'(player) {
     Meteor.setTimeout(() => {
-      Players.update(player._id, { $set: { speed: 10, boost: false } })
+      Players.update(player._id, {
+        $set: { speed: PLAYER_SPEED, boost: false }
+      })
     }, 5000)
   },
   'move.up'(player) {
