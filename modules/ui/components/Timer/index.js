@@ -44,9 +44,11 @@ class Timer extends Component {
   startTimer = () => {
     this.interval = setInterval(this.countDown, 1000)
     this.setState({ pause: false })
-    if (this.state.seconds >= 60 || this.state.seconds === 0)
+    if (this.state.seconds >= 60 || this.state.seconds === 0) {
+      Meteor.call('start.game')
       Meteor.call('reset.gameboard')
-    Meteor.call('reset.player.speed')
+      Meteor.call('reset.player.speed')
+    }
   }
 
   stopTimer = () => {
