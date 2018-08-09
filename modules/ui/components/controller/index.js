@@ -31,8 +31,20 @@ class Controller extends Component {
     const { player } = this.props;
     const { playerCreated } = this.state;
     console.log(player);
+    let styles = {
+      width: "100vw",
+      height: "100vh",
+      backgroundImage: "none",
+      background: player[0] ? player[0].color : "white"
+    };
+    if (player[0]) {
+      if (player[0].frozen) {
+        styles.backgroundImage = "url(./ice.png)";
+      }
+    }
+
     return (
-      <div style={{ width: "100vw", height: "100vh" }}>
+      <div style={styles}>
         {playerCreated ? (
           <Fragment>
             <h1>{player.name}</h1>
