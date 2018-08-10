@@ -39,7 +39,10 @@ class Controller extends Component {
     };
     if (player[0]) {
       if (player[0].frozen) {
-        styles.backgroundImage = "url(./ice.png)";
+        styles.backgroundColor = "rgba(30, 144, 255, 0.3)";
+      }
+      if (player[0].boost) {
+        styles.backgroundColor = "rgba(255, 0, 0, 0.3)";
       }
     }
 
@@ -47,9 +50,16 @@ class Controller extends Component {
       <div style={styles}>
         {playerCreated ? (
           <Fragment>
-            <h1>{player.name}</h1>
-            <p>{player.boost && "Boost!"}</p>
-            <p>{player.frozen && "Frozen!"}</p>
+            <div className="joystickInfo">
+              <h1 className="joystickName">{player[0] && player[0].name}</h1>
+              <p className="joystickBoost">
+                {player[0] && (player[0].boost && "Boost!")}
+              </p>
+              <p className="joystickFrozen">
+                {player[0] && (player[0].frozen && "Frozen!")}
+              </p>
+            </div>
+
             <Joystick />
           </Fragment>
         ) : (

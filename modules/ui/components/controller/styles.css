@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css?family=Faster+One|Orbitron|Stalinist+One");
 .formBackground {
   height: 100vh;
   width: 100vw;
@@ -37,4 +38,39 @@
   font-size: 150px;
   letter-spacing: 7px;
   margin-bottom: 10rem;
+}
+
+.joystickName {
+  font-family: "Orbitron", sans-serif;
+  font-size: 120px;
+  text-align: center;
+  padding-top: 3rem;
+  text-decoration: underline;
+}
+.joystickBoost {
+  font-family: "Faster One", cursive;
+  color: red;
+  padding: 1.2rem;
+  border-radius: 25px;
+  background: white;
+  font-size: 100px;
+  margin-top: 5rem;
+  text-align: center;
+}
+.joystickFrozen {
+  font-family: "Stalinist One", cursive;
+  color: blue;
+  text-shadow: inset 1px 1px 3px red;
+  background: white;
+  border-radius: 25px;
+
+  font-size: 100px;
+  margin-top: 5rem;
+  text-align: center;
+}
+
+.joystickInfo {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
 }
