@@ -41,7 +41,7 @@ class Joystick extends Component {
         <ReactNipple
           options={{
             mode: "static",
-            position: { top: "50%", left: "50%" },
+            position: { top: "70%", left: "50%" },
             color: "black",
             size: 350
           }}
