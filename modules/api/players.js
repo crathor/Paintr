@@ -44,7 +44,9 @@ if (Meteor.isServer) {
   AccountsGuest.enabled = true
   AccountsGuest.anonymous = true
 }
-
+const checkPlayers = () => {
+  return Players.find({}).count()
+}
 const getPlayer = player => {
   return Players.findOne({ player })
 }
@@ -120,6 +122,7 @@ Meteor.methods({
     Players.remove({ player })
   },
   'add.player'(name) {
+    if (checkPlayers() >= 3) return Meteor.Error({ message: 'Max Players Hit' })
     const newPlayer = {
       name,
       color: Konva.Util.getRandomColor(),
@@ -132,7 +135,7 @@ Meteor.methods({
       player: Meteor.userId()
     }
     Players.schema.validate(newPlayer)
-    return Players.insert(newPlayer)
+    Players.insert(newPlayer)
   },
   'boost.player'(player) {
     Players.schema.validate(player)

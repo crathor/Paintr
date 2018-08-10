@@ -36,8 +36,9 @@ class PlayerList extends Component {
                   >
                     <div>
                       <h3 className="playerName">{player.name}</h3>
-                      <p className="boost">{player.boost && 'BOOST!!'}</p>
-                      <p className="frozen">{player.frozen && 'FROZEN!'}</p>
+                      <p className={player.frozen ? 'frozen' : 'boost'}>
+                        {player.frozen ? 'FROZEN' : player.boost && 'BOOST!!'}
+                      </p>
                     </div>
                     <div>
                       <p className="playerPercent">
