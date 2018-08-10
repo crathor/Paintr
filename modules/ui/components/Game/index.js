@@ -22,76 +22,29 @@ class Game extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      startGameTimer: false,
       show: false,
       winner: {
         name: '',
         color: ''
       }
     }
-    this.direction = {}
-  }
-  move() {
-    if ('ArrowUp' in this.direction) Meteor.call('move.up', Meteor.userId())
-    if ('ArrowDown' in this.direction) Meteor.call('move.down', Meteor.userId())
-    if ('ArrowRight' in this.direction)
-      Meteor.call('move.right', Meteor.userId())
-    if ('ArrowLeft' in this.direction) Meteor.call('move.left', Meteor.userId())
+    //this.direction = {}
   }
   componentDidMount() {
     Meteor.call('reset.players')
-    this.mouseX = 0
-    this.mouseY = 0
     this.canvas = document.getElementById('game')
     this.ctx = this.canvas.getContext('2d')
     this.framesPerSecond = 30
     this.init = false
-    this.canvas.addEventListener(
-      'mousemove',
-      this.updateMousePosition.bind(this)
-    )
-
-    window.onkeydown = e => {
-      this.direction[e.key] = true
-      switch (e.key) {
-        case ADD_PLAYER_KEY:
-          Meteor.call('add.player', 'asdf' + Math.floor(Math.random() * 1000))
-          break
-        case RESET_KEY:
-          Meteor.call('reset.players')
-          Meteor.call('reset.gameboard')
-          break
-        default:
-          break
-      }
-    }
-    window.onkeyup = e => {
-      delete this.direction[e.key]
-    }
-  }
-  updateMousePosition(e) {
-    const rect = this.canvas.getBoundingClientRect()
-    const root = document.documentElement
-
-    this.mouseX = e.clientX - rect.left - root.scrollLeft
-    this.mouseY = e.clientY - rect.top - root.scrollTop
   }
   updateAll = () => {
-    this.move()
+    // this.move()
     this.drawAll()
   }
   drawAll() {
     this.colorRect(0, 0, this.canvas.width, this.canvas.height, '#000') //clear screen
     this.drawGrid() // draw grid
     this.drawPlayers() // draw players
-
-    //USED FOR SEEING BLOCK INDEX LOCATIONS
-    // this.colorText(
-    //   `${mouseBrickCol},${mouseBrickRow}:${brickIndex}`,
-    //   this.mouseX,
-    //   this.mouseY,
-    //   'yellow'
-    // )'
   }
   drawStar(cx, cy, spikes, outerRadius, innerRadius) {
     var rot = (Math.PI / 2) * 3
@@ -190,13 +143,6 @@ class Game extends Component {
             TILES[arrayIndex].color
           )
           if (TILES[arrayIndex].powerup) {
-            // draws a powerup circle thats green
-            // this.colorCircle(
-            //   BRICK_WIDTH * eachCol + BRICK_HEIGHT / 2,
-            //   BRICK_HEIGHT * eachRow + BRICK_WIDTH / 2,
-            //   10,
-            //   '#ff00d0'
-            // )
             this.drawStar(
               BRICK_WIDTH * eachCol + BRICK_HEIGHT / 2,
               BRICK_HEIGHT * eachRow + BRICK_WIDTH / 2,
@@ -237,7 +183,6 @@ class Game extends Component {
             <div className="header">
               <h1 className="gameTitle">Paintr</h1>
               <Timer
-                start={this.state.startGameTimer}
                 calcWinner={this.calcWinner}
                 winner={this.state.winner}
                 show={this.state.show}

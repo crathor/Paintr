@@ -30,7 +30,6 @@ class Controller extends Component {
   render() {
     const { player } = this.props;
     const { playerCreated } = this.state;
-    console.log(player);
     let styles = {
       width: "100vw",
       height: "100vh",
@@ -81,6 +80,7 @@ class Controller extends Component {
 }
 export default withTracker(() => {
   Meteor.subscribe("player");
+  Meteor.subscribe("gameboard");
   return {
     player: Players.find({})
       .fetch()
