@@ -1,25 +1,25 @@
-import React, { Component } from 'react'
-import { Meteor } from 'meteor/meteor'
-import './styles.css'
+import React, { Component } from "react";
+import { Meteor } from "meteor/meteor";
+import "./styles.css";
 
 class PlayerList extends Component {
   getCountPercentage(count, arrayLength) {
-    const percentage = (count * 100) / arrayLength
-    return percentage.toFixed(1)
+    const percentage = (count * 100) / arrayLength;
+    return percentage.toFixed(1);
   }
   render() {
-    const { players, bricks } = this.props
-    const brickColors = bricks.map(brick => brick.color)
+    const { players, bricks } = this.props;
+    const brickColors = bricks.map(brick => brick.color);
     const playerList = players
       .map(player => {
         const count =
-          brickColors.filter(color => color === player.color).length || 0
+          brickColors.filter(color => color === player.color).length || 0;
         return {
           ...player,
           count
-        }
+        };
       })
-      .sort((a, b) => a.count < b.count)
+      .sort((a, b) => a.count < b.count);
     return (
       <div className="players-container">
         <ul>
@@ -31,13 +31,18 @@ class PlayerList extends Component {
                 return (
                   <li
                     key={player._id}
-                    style={{ background: player.color, color: '#fff' }}
+                    style={{ background: player.color, color: "#fff" }}
                     className="playerCard"
                   >
                     <div>
                       <h3 className="playerName">{player.name}</h3>
-                      <p className="boost">{player.boost && 'BOOST!!'}</p>
-                      <p className="frozen">{player.frozen && 'FROZEN!'}</p>
+                    </div>
+                    <div>
+                      {player.frozen ? (
+                        <p className="frozen">FROZEN!</p>
+                      ) : (
+                        player.boost && <p className="boost">BOOST!</p>
+                      )}
                     </div>
                     <div>
                       <p className="playerPercent">
@@ -45,14 +50,14 @@ class PlayerList extends Component {
                       </p>
                     </div>
                   </li>
-                )
+                );
               })
               .sort((a, b) => a.speed > b.speed)
           )}
         </ul>
       </div>
-    )
+    );
   }
 }
 
-export default PlayerList
+export default PlayerList;
