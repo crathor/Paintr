@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css?family=Bungee+Inline|Press+Start+2P");
+@import url('https://fonts.googleapis.com/css?family=Bungee+Inline|Press+Start+2P');
 
 .Paintr {
   height: 100vh;
@@ -16,19 +16,17 @@
   height: 100%;
   width: 100%;
   display: flex;
-  justify-content: flex-start;
-}
-.sideBar:hover {
-  overflow: auto;
+  flex-direction: column;
+  justify-content: center;
 }
 .canvas {
   align-self: center;
   margin: 0 auto;
 }
 .headerContainer {
-  background: "#000";
+  background: '#000';
   width: 100vw;
-  color: "#fff";
+  color: '#fff';
   display: flex;
   justify-content: center;
 }

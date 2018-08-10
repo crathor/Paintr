@@ -21,34 +21,36 @@ class PlayerList extends Component {
       })
       .sort((a, b) => a.count < b.count)
     return (
-      <ul className="sideBar">
-        {playerList.length === 0 ? (
-          <h1 className="noPlayers">No Players</h1>
-        ) : (
-          playerList
-            .map(player => {
-              return (
-                <li
-                  key={player._id}
-                  style={{ background: player.color, color: '#fff' }}
-                  className="playerCard"
-                >
-                  <div>
-                    <h3 className="playerName">{player.name}</h3>
-                    <p className="boost">{player.boost && 'BOOST!!'}</p>
-                    <p className="frozen">{player.frozen && 'FROZEN!'}</p>
-                  </div>
-                  <div>
-                    <p className="playerPercent">
-                      {this.getCountPercentage(player.count, bricks.length)}%
-                    </p>
-                  </div>
-                </li>
-              )
-            })
-            .sort((a, b) => a.speed > b.speed)
-        )}
-      </ul>
+      <div className="players-container">
+        <ul>
+          {playerList.length === 0 ? (
+            <h1 className="noPlayers">No Players</h1>
+          ) : (
+            playerList
+              .map(player => {
+                return (
+                  <li
+                    key={player._id}
+                    style={{ background: player.color, color: '#fff' }}
+                    className="playerCard"
+                  >
+                    <div>
+                      <h3 className="playerName">{player.name}</h3>
+                      <p className="boost">{player.boost && 'BOOST!!'}</p>
+                      <p className="frozen">{player.frozen && 'FROZEN!'}</p>
+                    </div>
+                    <div>
+                      <p className="playerPercent">
+                        {this.getCountPercentage(player.count, bricks.length)}%
+                      </p>
+                    </div>
+                  </li>
+                )
+              })
+              .sort((a, b) => a.speed > b.speed)
+          )}
+        </ul>
+      </div>
     )
   }
 }

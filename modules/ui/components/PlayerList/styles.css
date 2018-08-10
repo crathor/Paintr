@@ -1,17 +1,17 @@
-.sideBar {
-  height: 100%;
-  width: 30%;
-  overflow: hidden;
-  background: "#000";
-  box-shadow: "1px 1px 3px #000";
+.players-container {
+  width: 100%;
 }
-.sideBar:hover {
-  overflow-y: scroll;
+.players-container ul {
+  display: flex;
+  justify-content: center;
+}
+.players-container li {
+  max-width: 33vw;
+  flex: 1 0;
 }
 .noPlayers {
-  font-family: "Press Start 2P", cursive;
-  margin-left: 2rem;
-  margin-top: 2rem;
+  font-family: 'Press Start 2P', cursive;
+  margin-bottom: 1rem;
 }
 .playerCard {
   display: flex;
@@ -19,7 +19,7 @@
   align-items: center;
   padding: 1rem;
   border: 2px solid black;
-  font-family: "Press Start 2P", cursive;
+  font-family: 'Press Start 2P', cursive;
 }
 .playerPercent {
   font-size: 46px;

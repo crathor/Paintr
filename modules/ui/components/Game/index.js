@@ -3,7 +3,6 @@ import { withTracker } from 'meteor/react-meteor-data'
 import PlayerList from '../PlayerList'
 import { Players } from '../../../api/players'
 import { GameBoard } from '../../../api/gameboard'
-import './styles/styles.css'
 import Timer from '../Timer'
 import { Meteor } from 'meteor/meteor'
 import { GAME_WIDTH, GAME_HEIGHT, BRICK_COLUMNS, BRICK_ROWS } from '../config'
@@ -11,6 +10,7 @@ import { refreshCanvas } from './helpers/refreshCanvas'
 import { drawGameboard, initGameboard } from './helpers/drawGameboard'
 import { drawPlayers } from './helpers/drawPlayers'
 import { getWinner } from './helpers/getWinner'
+import './styles.css'
 
 class Game extends Component {
   constructor(props) {
