@@ -1,44 +1,44 @@
-import React, { Component, Fragment } from 'react'
-import Joystick from './Joystick'
-import { Meteor } from 'meteor/meteor'
-import { withTracker } from 'meteor/react-meteor-data'
-import { Players } from '../../../api/players'
-import './styles.css'
+import React, { Component, Fragment } from "react";
+import Joystick from "./Joystick";
+import { Meteor } from "meteor/meteor";
+import { withTracker } from "meteor/react-meteor-data";
+import { Players } from "../../../api/players";
+import "./styles.css";
 
 class Controller extends Component {
   state = {
     playerCreated: false,
-    name: ''
-  }
+    name: ""
+  };
   handleChange = event => {
-    if (event.target.value.length > 8) return
-    this.setState({ name: event.target.value })
-  }
+    if (event.target.value.length > 8) return;
+    this.setState({ name: event.target.value });
+  };
 
   handleSubmit = e => {
-    e.preventDefault()
-    if (this.state.name === '') return
+    e.preventDefault();
+    if (this.state.name === "") return;
     this.setState(
       {
         playerCreated: true
       },
       async () => {
-        await Meteor.call('add.player', this.state.name)
+        await Meteor.call("add.player", this.state.name);
       }
-    )
-  }
+    );
+  };
   render() {
-    const { player } = this.props
-    const { playerCreated } = this.state
+    const { player } = this.props;
+    const { playerCreated } = this.state;
     let styles = {
-      width: '100vw',
-      height: '100vh',
-      backgroundImage: 'none',
-      background: player[0] ? player[0].color : 'white'
-    }
+      width: "100vw",
+      height: "100vh",
+      backgroundImage: "none",
+      background: player[0] ? player[0].color : "white"
+    };
     if (player[0]) {
       if (player[0].frozen) {
-        styles.backgroundImage = 'url(./ice.png)'
+        styles.backgroundColor = "rgba(30, 144, 255, 0.3)";
       }
     }
 
@@ -46,9 +46,16 @@ class Controller extends Component {
       <div style={styles}>
         {playerCreated ? (
           <Fragment>
-            <h1>{player.name}</h1>
-            <p>{player.boost && 'Boost!'}</p>
-            <p>{player.frozen && 'Frozen!'}</p>
+            <div className="joystickInfo">
+              <h1 className="joystickName">{player[0] && player[0].name}</h1>
+              <p className="joystickBoost">
+                {player[0] && (player[0].boost && "Boost!")}
+              </p>
+              <p className="joystickFrozen">
+                {player[0] && (player[0].frozen && "Frozen!")}
+              </p>
+            </div>
+
             <Joystick />
           </Fragment>
         ) : (
@@ -68,15 +75,15 @@ class Controller extends Component {
           </div>
         )}
       </div>
-    )
+    );
   }
 }
 export default withTracker(() => {
-  Meteor.subscribe('player')
-  Meteor.subscribe('gameboard')
+  Meteor.subscribe("player");
+  Meteor.subscribe("gameboard");
   return {
     player: Players.find({})
       .fetch()
       .filter(curr => curr.player === Meteor.userId())
-  }
-})(Controller)
+  };
+})(Controller);
