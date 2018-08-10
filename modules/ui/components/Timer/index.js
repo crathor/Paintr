@@ -65,6 +65,7 @@ class Timer extends Component {
       seconds: GAME_TIME,
       show: false
     })
+    Meteor.call('reset.gameboard')
   }
   countDown = () => {
     // Remove one second, set state so a re-render happens.
