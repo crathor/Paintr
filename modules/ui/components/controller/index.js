@@ -48,10 +48,16 @@ class Controller extends Component {
           <Fragment>
             <div className="joystickInfo">
               <h1 className="joystickName">{player[0] && player[0].name}</h1>
-              <p className="joystickBoost">
+              <p
+                className={player[0] && player[0].boost ? "joystickBoost" : ""}
+              >
                 {player[0] && (player[0].boost && "Boost!")}
               </p>
-              <p className="joystickFrozen">
+              <p
+                className={
+                  player[0] && player[0].frozen ? "joystickFrozen" : ""
+                }
+              >
                 {player[0] && (player[0].frozen && "Frozen!")}
               </p>
             </div>
