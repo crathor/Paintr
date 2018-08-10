@@ -2,7 +2,7 @@ import { METEOR } from 'meteor/meteor'
 import { Mongo } from 'meteor/mongo'
 import { BRICK_COLUMNS, BRICK_ROWS } from '../ui/components/config'
 import SimpleSchema from 'simpl-schema'
-import { Players } from '../api/players'
+import { Players } from './players'
 
 if (Meteor.isServer) {
   Meteor.publish('gameboard', () => {
