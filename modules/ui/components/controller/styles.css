@@ -23,6 +23,9 @@
 }
 
 .nameSubmit {
+  border: 2px solid darkgrey;
+  border-radius: 25px;
+  background: white;
   height: 150px;
   width: 25vw;
   font-size: 40px;
@@ -44,12 +47,13 @@
   font-family: "Orbitron", sans-serif;
   font-size: 120px;
   text-align: center;
-  padding-top: 3rem;
+  padding-top: 35%;
   text-decoration: underline;
 }
 .joystickBoost {
   font-family: "Faster One", cursive;
   color: red;
+  border: 2px solid red;
   padding: 1.2rem;
   border-radius: 25px;
   background: white;
@@ -60,7 +64,7 @@
 .joystickFrozen {
   font-family: "Stalinist One", cursive;
   color: blue;
-  text-shadow: inset 1px 1px 3px red;
+  border: 2px solid blue;
   background: white;
   border-radius: 25px;
 
