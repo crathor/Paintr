@@ -41,9 +41,6 @@ class Controller extends Component {
       if (player[0].frozen) {
         styles.backgroundColor = "rgba(30, 144, 255, 0.3)";
       }
-      if (player[0].boost) {
-        styles.backgroundColor = "rgba(255, 0, 0, 0.3)";
-      }
     }
 
     return (
