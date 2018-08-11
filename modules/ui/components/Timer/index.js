@@ -73,7 +73,7 @@ class Timer extends Component {
       time: this.secondsToTime(seconds),
       seconds: seconds
     })
-    if (seconds % 5 === 0) {
+    if (seconds % 5 === 0 || seconds % 8 === 0) {
       Meteor.call(
         'update.brick',
         Math.floor(Math.random() * (BRICK_COLUMNS * BRICK_ROWS))

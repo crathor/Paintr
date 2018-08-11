@@ -62,18 +62,12 @@ const checkCollision = player => {
         switch (power) {
           case 7:
             Meteor.call('freeze.players', player)
-            Meteor.call('unfreeze.players')
             break
           case 2:
             Meteor.call('freeze.players', player)
-            Meteor.call('unfreeze.players')
             break
           case 11:
             Meteor.call('freeze.players', player)
-            Meteor.call('unfreeze.players')
-            break
-          case 14:
-            Meteor.call('boost.player', player)
             break
           case 8:
             Meteor.call('set.gameboard.color', player)
@@ -83,8 +77,7 @@ const checkCollision = player => {
             break
 
           default:
-            Meteor.call('freeze.players', player)
-            Meteor.call('unfreeze.players')
+            Meteor.call('boost.player', player)
             break
         }
         GameBoard.update({ index: brickIndex }, { $set: { powerup: false } })
@@ -113,7 +106,6 @@ Meteor.methods({
     Players.update({}, { $set: { speed: PLAYER_SPEED } }, { multi: true })
   },
   'freeze.players'(player) {
-    Players.schema.validate({ ...player })
     Players.update(
       { color: { $ne: player.color } },
       { $set: { speed: 0, frozen: true } },
@@ -162,7 +154,7 @@ Meteor.methods({
   },
   'move.up'(player) {
     const p = getPlayer(player)
-    Players.schema.validate(p)
+    //Players.schema.validate(p)
     if (p.y <= 0 + p.speed) return
     else {
       Players.update({ player }, { $set: { y: p.y - p.speed } })
@@ -171,7 +163,7 @@ Meteor.methods({
   },
   'move.down'(player) {
     const p = getPlayer(player)
-    Players.schema.validate(p)
+    //Players.schema.validate(p)
     if (p.y >= GAME_HEIGHT - p.speed) return
     else {
       Players.update({ player }, { $set: { y: p.y + p.speed } })
@@ -180,7 +172,7 @@ Meteor.methods({
   },
   'move.left'(player) {
     const p = getPlayer(player)
-    Players.schema.validate(p)
+    //Players.schema.validate(p)
     if (p.x <= 0 + p.speed) return
     else {
       Players.update({ player }, { $set: { x: p.x - p.speed } })
@@ -189,7 +181,7 @@ Meteor.methods({
   },
   'move.right'(player) {
     const p = getPlayer(player)
-    Players.schema.validate(p)
+    //Players.schema.validate(p)
     if (p.x >= GAME_WIDTH - p.speed) return
     else {
       Players.update({ player }, { $set: { x: p.x + p.speed } })
