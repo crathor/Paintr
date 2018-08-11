@@ -27,7 +27,7 @@ class Game extends Component {
     Meteor.call('reset.players')
     this.canvas = document.getElementById('game')
     this.ctx = this.canvas.getContext('2d')
-    this.framesPerSecond = 30
+    this.framesPerSecond = 60
     this.init = false
   }
   drawGame = () => {

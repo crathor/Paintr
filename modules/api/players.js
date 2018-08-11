@@ -58,11 +58,22 @@ const checkCollision = player => {
     const brick = GameBoard.find({ index: brickIndex }).fetch()
     if (brick[0].powerup) {
       if (!player.boost) {
-        const power = Math.floor(Math.random() * 10)
+        const power = Math.floor(Math.random() * 15)
         switch (power) {
           case 7:
             Meteor.call('freeze.players', player)
             Meteor.call('unfreeze.players')
+            break
+          case 2:
+            Meteor.call('freeze.players', player)
+            Meteor.call('unfreeze.players')
+            break
+          case 11:
+            Meteor.call('freeze.players', player)
+            Meteor.call('unfreeze.players')
+            break
+          case 14:
+            Meteor.call('boost.player', player)
             break
           case 8:
             Meteor.call('set.gameboard.color', player)
@@ -72,7 +83,8 @@ const checkCollision = player => {
             break
 
           default:
-            Meteor.call('boost.player', player)
+            Meteor.call('freeze.players', player)
+            Meteor.call('unfreeze.players')
             break
         }
         GameBoard.update({ index: brickIndex }, { $set: { powerup: false } })
@@ -101,7 +113,7 @@ Meteor.methods({
     Players.update({}, { $set: { speed: PLAYER_SPEED } }, { multi: true })
   },
   'freeze.players'(player) {
-    Players.schema.validate(player)
+    Players.schema.validate({ ...player })
     Players.update(
       { color: { $ne: player.color } },
       { $set: { speed: 0, frozen: true } },
