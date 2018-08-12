@@ -126,7 +126,7 @@ Meteor.methods({
     Players.remove({ player })
   },
   'add.player'(name) {
-    if (checkPlayers() >= 3) return Meteor.Error({ message: 'Max Players Hit' })
+    if (checkPlayers() >= 4) return Meteor.Error({ message: 'Max Players Hit' })
     const newPlayer = {
       name,
       color: Konva.Util.getRandomColor(),
