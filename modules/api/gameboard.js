@@ -18,24 +18,14 @@ GameBoard.initGrid = new SimpleSchema({
   _id: String,
   index: Number
 })
-
-const initializePowerUpRandomizer = () => {
-  Meteor.setInterval(() => {
-    if (GameBoard.find({ powerup: true }).count() <= 3) {
-      const brick = GameBoard.findOne({
-        index: Math.floor(Math.random() * (BRICK_COLUMNS * BRICK_ROWS))
-      })
-      Meteor.call('update.brick', brick._id)
-    }
-  }, 3000)
-}
+GameBoard.brickSchema = new SimpleSchema({
+  index: Number
+})
 
 Meteor.methods({
-  'start.game'() {
-    initializePowerUpRandomizer()
-  },
-  'update.brick'(_id) {
-    GameBoard.update(_id, { $set: { powerup: true } })
+  'update.brick'(index) {
+    GameBoard.brickSchema.validate({ index })
+    GameBoard.update({ index }, { $set: { powerup: true } })
   },
   'init.gameboard'(_id, index) {
     GameBoard.initGrid.validate({ _id, index })

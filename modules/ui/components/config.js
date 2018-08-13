@@ -9,9 +9,6 @@ export const PLAYER_SPEED = 5;
 export const PLAYER_BOOST = 10;
 export const PLAYER_SIZE = 20;
 export const BRICK_GRID = new Array(BRICK_COLUMNS * BRICK_ROWS).fill("red");
-export const RESET_KEY = "`";
-export const START_KEY = "Enter";
-export const ADD_PLAYER_KEY = "p";
 export const GAME_TIME = 60;
 export const FRAMES_PER_SECOND = 45;
 export const rowColToArrayIndex = (col, row) => {

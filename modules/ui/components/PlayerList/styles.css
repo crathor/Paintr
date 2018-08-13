@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css?family=Faster+One|Orbitron|Stalinist+One");
+@import url('https://fonts.googleapis.com/css?family=Faster+One|Orbitron|Stalinist+One');
 
 .players-container {
   width: 100%;
@@ -8,11 +8,11 @@
   justify-content: center;
 }
 .players-container li {
-  max-width: 33vw;
+  max-width: 25vw;
   flex: 1 0;
 }
 .noPlayers {
-  font-family: "Press Start 2P", cursive;
+  font-family: 'Press Start 2P', cursive;
   margin-bottom: 1rem;
 }
 .playerCard {
@@ -22,10 +22,10 @@
   padding: 1rem;
   margin-bottom: 0.5rem;
   border: 2px solid black;
-  font-family: "Press Start 2P", cursive;
+  font-family: 'Press Start 2P', cursive;
 }
 .playerPercent {
-  font-size: 46px;
+  font-size: 36px;
 }
 .boost {
   text-align: center;
@@ -35,7 +35,7 @@
   color: red;
   font-size: 24px;
   padding: 0.4rem;
-  font-family: "Faster One", cursive;
+  font-family: 'Faster One', cursive;
 }
 .frozen {
   background: white;
@@ -44,5 +44,5 @@
   font-size: 24px;
   border: 2px solid blue;
   border-radius: 25px;
-  font-family: "Stalinist One", cursive;
+  font-family: 'Stalinist One', cursive;
 }
