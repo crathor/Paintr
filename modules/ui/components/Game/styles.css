@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Bungee+Inline|Press+Start+2P');
+@import url("https://fonts.googleapis.com/css?family=Bungee+Inline|Press+Start+2P");
 
 .Paintr {
   height: 100vh;
@@ -24,9 +24,9 @@
   margin: 0 auto;
 }
 .headerContainer {
-  background: '#000';
+  background: "#000";
   width: 100vw;
-  color: '#fff';
+  color: "#fff";
   display: flex;
   justify-content: center;
 }
@@ -36,6 +36,12 @@
   width: 95%;
   display: flex;
   justify-content: space-between;
+}
+.titleLogo {
+  display: flex;
+}
+.logo {
+  margin-right: 40px;
 }
 /* courtesy of https://codepen.io/nohoid/pen/kIfto?editors=1100 */
 .rainbowBackground {

@@ -72,7 +72,16 @@ class Game extends Component {
         <div className="Paintr">
           <header className="headerContainer">
             <div className="header">
-              <h1 className="gameTitle">Paintr</h1>
+              <div className="titleLogo">
+                <h1 className="gameTitle">Paintr</h1>
+                <img
+                  className="logo"
+                  src="/PAINTR.svg"
+                  alt="post Travel image"
+                  height="58"
+                  width="58"
+                />
+              </div>
               <Timer calcWinner={this.calcWinner} winner={winner} show={show} />
             </div>
           </header>
