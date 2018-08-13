@@ -43,7 +43,7 @@ class Joystick extends Component {
             mode: "static",
             position: { top: "70%", left: "50%" },
             color: "black",
-            size: 350
+            size: 250
           }}
           style={{
             width: "100vw",
