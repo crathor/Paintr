@@ -13,21 +13,53 @@ To get started first you must clone this repository. after cloning it please ref
 - [Meteor](https://www.meteor.com/) - App Development Platform
 - [React](https://reactjs.org/docs/hello-world.html) - UI Design
 - [React-Nipple](https://loopmode.github.io/react-nipple/) - Virtual Joystick
-- [Konva](https://konvajs.github.io/docs/react/index.html) - Random Color Generator
-
+- [Konva](https://konvajs.github.io/docs/react/index.html) - Used for its Random Color Generator
+- [Ngrok](https://ngrok.com/) - Exposes localhost for proper testing
 # Installation
 
 Commands must be run in the project directory
 
-`npm install`
+```
+npm install
+```
 
 ### Run
 
-`meteor`
+```
+meteor
+````
 
 ### Reset Database
 
-`meteor reset`
+```
+meteor reset
+```
+
+# When app is running on Localhost
+
+```
+ensure you have completed the installation of ngrok. link above in the technologies used.
+```
+
+```
+cd into the directory you have installed ngrok (usually user folder) and type the following command:
+
+./ngrok http <Localhost port number here>
+
+this will give you links to share with others so that they can play as well.
+```
+
+# Instructions on how to play
+
+`after completing the above:`
+
+```
+Once all players have created a name and you are ready to play simply hit the start button and enjoy!
+
+If you would like to reset the players for now you just simply refresh the page and vice versa with the devices connected.
+
+HAVE FUN!!
+```
 
 # Acknowledgments
 
